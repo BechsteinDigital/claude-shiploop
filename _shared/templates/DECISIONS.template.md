@@ -1,0 +1,13 @@
+# Entscheidungslog (ADR-light)
+
+Autonome Entscheidungen werden hier geloggt statt den User zu fragen.
+Neueste Einträge oben. Nie Einträge löschen — überholte als `revidiert durch ADR-XXX` markieren.
+
+---
+
+## ADR-001: <Titel>
+- Datum: … · Rolle: <ceo|po|dev|setup|loop> · Status: aktiv
+- **Entscheidung:** …
+- **Alternativen:** …
+- **Begründung:** …
+- **Revidierbar:** ja/nein — Kosten der Umkehr: …
