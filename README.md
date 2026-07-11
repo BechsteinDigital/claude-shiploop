@@ -57,7 +57,12 @@ project/
 ```
 
 Kopiert alle Skills + `_shared/` nach `<projekt>/.claude/skills/`. Alternativ für globale
-Nutzung in alle Projekte: `./install.sh ~ --global` (legt sie unter `~/.claude/skills/` ab).
+Nutzung in alle Projekte: `./install.sh --global` (legt sie unter `~/.claude/skills/` ab).
+Die Skills referenzieren die Skripte in `_shared/scripts/` relativ zum Installationsort —
+beide Varianten funktionieren.
+
+Liegt dieses Master-Repo nicht unter `~/Projekte/Skills`, die globale Wissensbasis per
+Env-Variable bekanntmachen: `export SKILLS_KNOWLEDGE_DIR=<repo>/_shared/knowledge`.
 
 **Betriebshinweis:** Die Claude-Code-Session immer **im Zielprojekt** starten — Subagenten können
 außerhalb des Session-Roots nicht schreiben. Für den autonomen Loop brauchen DEV-Subagenten einen

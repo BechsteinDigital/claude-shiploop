@@ -11,7 +11,7 @@ Kein Refactoring, keine Neuimplementierung, kein Projekt-Gesamtreview.
 
 ## Pflichtinput
 1. die WORK-Karte des Pakets (Akzeptanzkriterien, Nicht-Ziele, Claim-Grenzen, Claim-Zone)
-2. kompakter Diff-Scan: `.claude/skills/_shared/scripts/compact-diff-scan.sh <base> <head>` (Risiko-Regex aus `project/PROFILE.md`)
+2. kompakter Diff-Scan: `<skills-dir>/_shared/scripts/compact-diff-scan.sh <base> <head>` — `<skills-dir>` ist der Installationsort dieser Skills (projektlokal `.claude/skills/`, global `~/.claude/skills/`); Risiko-Regex aus `project/PROFILE.md`
 3. `project/PROFILE.md` — Qualitätsregeln, Architektur-Kurzbild
 4. DEV-Output (TESTS/CAVEATS/ZONE)
 

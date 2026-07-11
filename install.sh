@@ -2,16 +2,16 @@
 # Installiert die Skill-Suite in ein Projekt (.claude/skills/) oder global (~/.claude/skills/).
 set -euo pipefail
 
-usage() { echo "Usage: install.sh <projekt-pfad> [--global]"; exit 1; }
+usage() { echo "Usage: install.sh <projekt-pfad> | install.sh --global"; exit 1; }
 [[ $# -ge 1 ]] || usage
 
 src_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-target_root="$1"
-[[ -d "$target_root" ]] || { echo "Zielpfad existiert nicht: $target_root" >&2; exit 1; }
 
-if [[ "${2:-}" == "--global" ]]; then
+if [[ "$1" == "--global" || "${2:-}" == "--global" ]]; then
   dest="$HOME/.claude/skills"
 else
+  target_root="$1"
+  [[ -d "$target_root" ]] || { echo "Zielpfad existiert nicht: $target_root" >&2; exit 1; }
   dest="$target_root/.claude/skills"
 fi
 

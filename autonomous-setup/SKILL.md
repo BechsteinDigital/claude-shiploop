@@ -16,7 +16,8 @@ Autonomievertrag in `project/BRIEF.md`.
 ## Phasen
 
 ### 1. Research (timeboxed, parallel)
-Zuerst die globale Wissensbasis lesen (`~/Projekte/Skills/_shared/knowledge/`, falls vorhanden) —
+Zuerst die globale Wissensbasis lesen (`$SKILLS_KNOWLEDGE_DIR`, sonst Default
+`~/Projekte/Skills/_shared/knowledge/`; existiert keins von beiden → überspringen) —
 dokumentierte Learnings aus früheren Projekten ersetzen Recherche und verhindern Wiederholungsfehler.
 
 Dann parallele read-only Subagenten in einem Aufruf-Block, je Frage einer:

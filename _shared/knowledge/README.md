@@ -1,9 +1,11 @@
 # Globale Wissensbasis (Erfahrungswissen)
 
 Projektübergreifendes, destilliertes Lernen der Skill-Suite. **Kanonischer Ort ist genau dieses
-Verzeichnis** (`~/Projekte/Skills/_shared/knowledge/`) — `install.sh` kopiert es bewusst NICHT in
-Projekte, damit es nur eine Wahrheit gibt. Skills lesen/schreiben direkt hier; existiert der Pfad
-auf einer Maschine nicht, degradieren sie auf projektlokales `project/LEARNINGS.md`.
+Verzeichnis.** Skills finden es über die Env-Variable `SKILLS_KNOWLEDGE_DIR`, Default
+`~/Projekte/Skills/_shared/knowledge/` (liegt das Master-Repo woanders: Variable setzen, z. B. in
+`~/.bashrc`). `install.sh` kopiert es bewusst NICHT in Projekte, damit es nur eine Wahrheit gibt.
+Skills lesen/schreiben direkt hier; ist der Pfad auf einer Maschine nicht auflösbar, degradieren
+sie auf projektlokales `project/LEARNINGS.md`.
 
 ## Was hierher gehört
 - Generalisierbare Regeln aus Retros (Milestone-/MVP-Gate des `autonomous-loop`)

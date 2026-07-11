@@ -5,25 +5,28 @@ set -euo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: merge-check.sh <base-ref> --zone <pfad>... [--allow <pfad>...] [--test-cmd "<kommando>"]
+Usage: merge-check.sh <base-ref> --zone <pfad>... [--allow <pfad>...] [--deny <pfad>...] [--test-cmd "<kommando>"]
   <base-ref>   Vergleichsbasis (z. B. main oder letzter Merge-Commit)
   --zone       Claim-Zone des Pakets: Datei oder Verzeichnis-Präfix (mehrfach angebbar)
-  --allow      zusätzlich erlaubte Pfade, z. B. project/ für Orchestrator-Artefakte (mehrfach)
+  --allow      zusätzlich erlaubte Pfade, z. B. die eigene WORK-Karte (mehrfach)
+  --deny       gesperrte Pfade, überstimmen Zone UND Allow (mehrfach) — für Dateien,
+               die ein Paket nie ändern darf (z. B. project/STATE.md)
   --test-cmd   volles Test-Kommando aus project/PROFILE.md; Exit != 0 blockiert den Merge
 Geprüft werden committete Änderungen seit <base-ref>, uncommittete Änderungen und neue
-(untracked) Dateien. Jede Datei außerhalb von Zone+Allow ist eine Verletzung.
+(untracked) Dateien. Jede Datei außerhalb von Zone+Allow oder auf Deny ist eine Verletzung.
 USAGE
 }
 
 [[ $# -ge 1 ]] || { usage; exit 2; }
 base_ref="$1"; shift
 
-declare -a zones=() allows=()
+declare -a zones=() allows=() denies=()
 test_cmd=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --zone)     shift; zones+=("${1:?--zone braucht einen Pfad}") ;;
     --allow)    shift; allows+=("${1:?--allow braucht einen Pfad}") ;;
+    --deny)     shift; denies+=("${1:?--deny braucht einen Pfad}") ;;
     --test-cmd) shift; test_cmd="${1:?--test-cmd braucht ein Kommando}" ;;
     -h|--help)  usage; exit 0 ;;
     *) echo "Unbekannter Parameter: $1" >&2; usage; exit 2 ;;
@@ -53,6 +56,10 @@ mapfile -t changed < <(
 fail=0
 declare -a violations=()
 for f in "${changed[@]}"; do
+  if [[ ${#denies[@]} -gt 0 ]] && matches "$f" "${denies[@]}"; then
+    violations+=("$f (DENY)"); fail=1
+    continue
+  fi
   in_zone=0
   matches "$f" "${zones[@]}" && in_zone=1
   if [[ $in_zone -eq 0 && ${#allows[@]} -gt 0 ]]; then
@@ -63,12 +70,14 @@ done
 
 allow_str=""
 [[ ${#allows[@]} -gt 0 ]] && allow_str=" · Allow: ${allows[*]}"
-echo "Merge-Check gegen ${base_ref} — Zone: ${zones[*]}${allow_str}"
+deny_str=""
+[[ ${#denies[@]} -gt 0 ]] && deny_str=" · Deny: ${denies[*]}"
+echo "Merge-Check gegen ${base_ref} — Zone: ${zones[*]}${allow_str}${deny_str}"
 if [[ ${#violations[@]} -gt 0 ]]; then
-  echo "ZONEN-VERLETZUNG — ${#violations[@]} Datei(en) außerhalb Zone+Allow:"
+  echo "ZONEN-VERLETZUNG — ${#violations[@]} Datei(en) außerhalb Zone+Allow oder auf Deny:"
   printf '  - %s\n' "${violations[@]}"
 else
-  echo "Zonen-Check: OK (${#changed[@]} geänderte/neue Dateien, alle in Zone+Allow)"
+  echo "Zonen-Check: OK (${#changed[@]} geänderte/neue Dateien, alle in Zone+Allow, keine auf Deny)"
 fi
 
 if [[ -n "$test_cmd" ]]; then
