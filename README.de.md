@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/BechsteinDigital/claude-shiploop/actions/workflows/ci.yml/badge.svg)](https://github.com/BechsteinDigital/claude-shiploop/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Projekt%20unterst%C3%BCtzen-ff5e5b?logo=ko-fi&logoColor=white)](https://ko-fi.com/bechsteindigital)
 
 **Autonome Delivery-Skills für Claude Code — Idee pitchen, MVP bekommen.**
 Projekt- und sprachunabhängige Skill-Suite: vom Idee-Pitch über autonomes Setup
