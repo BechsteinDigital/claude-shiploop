@@ -16,8 +16,8 @@ autonomy contract in `project/BRIEF.md`.
 ## Phases
 
 ### 1. Research (timeboxed, parallel)
-First read the global knowledge base (`$SKILLS_KNOWLEDGE_DIR`, otherwise default
-`~/Projekte/Skills/_shared/knowledge/`; if neither exists → skip) —
+First read the global knowledge base (resolve: `$SKILLS_KNOWLEDGE_DIR` if set, otherwise the path
+in `<skills-dir>/_shared/knowledge.path` — written by install.sh; if neither resolves → skip) —
 documented learnings from earlier projects replace research and prevent repeat mistakes.
 
 Then parallel read-only subagents in one invocation block, one per question:

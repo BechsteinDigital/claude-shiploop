@@ -30,6 +30,8 @@ jobs:
           test -d "$target/.claude/skills/_shared/templates"
           # knowledge/ must NOT be installed — it lives only in the master repo
           test ! -e "$target/.claude/skills/_shared/knowledge"
+          # instead, its location must be recorded for dynamic resolution
+          test "$(cat "$target/.claude/skills/_shared/knowledge.path")" = "$(pwd)/_shared/knowledge"
 
       - name: Global install
         run: |

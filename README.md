@@ -105,8 +105,10 @@ project/
 The skills reference the scripts in `_shared/scripts/` relative to the installation location —
 both variants work.
 
-If this master repo does not live at `~/Projekte/Skills`, expose the global knowledge base via
-an environment variable: `export SKILLS_KNOWLEDGE_DIR=<repo>/_shared/knowledge`.
+The global knowledge base stays in this repo (single source, never installed into projects).
+`install.sh` records its absolute path in the installation (`_shared/knowledge.path`), so skills
+find it from any project — no fixed clone location required. If you move the repo, re-run
+`./install.sh`, or override via `export SKILLS_KNOWLEDGE_DIR=<repo>/_shared/knowledge`.
 
 **Operational note:** always start the Claude Code session **in the target project** — subagents
 cannot write outside the session root. For the autonomous loop, DEV subagents need a permission

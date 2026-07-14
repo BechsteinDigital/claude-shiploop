@@ -29,6 +29,9 @@ mkdir -p "$dest/_shared"
 cp -r "$src_dir/_shared/templates" "$dest/_shared/"
 cp -r "$src_dir/_shared/scripts" "$dest/_shared/"
 chmod +x "$dest/_shared/scripts/"*.sh
+# Record where the master repo's knowledge base lives, so skills can find it from any
+# installation without a hardcoded path ($SKILLS_KNOWLEDGE_DIR overrides at runtime).
+printf '%s\n' "$src_dir/_shared/knowledge" > "$dest/_shared/knowledge.path"
 
 echo "Installed to: $dest"
 echo "Skills: ${skills[*]}"

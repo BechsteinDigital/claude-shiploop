@@ -1,11 +1,12 @@
 # Global Knowledge Base (experience)
 
 Cross-project, distilled learning of the skill suite. **The canonical location is exactly this
-directory.** Skills find it via the env variable `SKILLS_KNOWLEDGE_DIR`, default
-`~/Projekte/Skills/_shared/knowledge/` (if the master repo lives elsewhere: set the variable, e.g. in
-`~/.bashrc`). `install.sh` deliberately does NOT copy it into projects, so there is only one truth.
-Skills read/write directly here; if the path can't be resolved on a machine, they degrade
-to project-local `project/LEARNINGS.md`.
+directory.** `install.sh` records its absolute path in the installation
+(`<skills-dir>/_shared/knowledge.path`), so skills find it from any project regardless of where
+this repo is cloned; the env variable `SKILLS_KNOWLEDGE_DIR` overrides that (useful if the repo
+moved — or re-run `install.sh`). `install.sh` deliberately does NOT copy this directory into
+projects, so there is only one truth. Skills read/write directly here; if the path can't be
+resolved on a machine, they degrade to project-local `project/LEARNINGS.md`.
 
 ## What belongs here
 - Generalizable rules from retros (milestone/MVP gate of `autonomous-loop`)

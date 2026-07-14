@@ -54,8 +54,9 @@ blocker after 2 attempts. Escalation = compact decision memo (situation, options
 Distill max. **3–5 learnings** — each: rule in one sentence, why (evidence), application. Sources:
 review findings, blockers, revised ADRs. Project-specific ones go to `project/LEARNINGS.md`;
 generalizable ones additionally as their own file into the global knowledge base
-(`$SKILLS_KNOWLEDGE_DIR`, otherwise default `~/Projekte/Skills/_shared/knowledge/`;
-if neither exists → project-local only; format see its README).
+(resolve: `$SKILLS_KNOWLEDGE_DIR` if set, otherwise the path in `<skills-dir>/_shared/knowledge.path`
+— written by install.sh, points to the master repo; if neither resolves → project-local only;
+format see its README).
 No running log, no duplicates of rules already codified in skills — distillate only.
 
 ## Stop conditions
