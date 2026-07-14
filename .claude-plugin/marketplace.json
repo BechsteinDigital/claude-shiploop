@@ -1,0 +1,27 @@
+{
+  "name": "bechstein-digital",
+  "description": "Plugins by Bechstein.Digital — autonomous delivery for Claude Code.",
+  "owner": {
+    "name": "Bechstein.Digital Ecommerce UG",
+    "email": "info@bechstein.digital"
+  },
+  "plugins": [
+    {
+      "name": "claude-shiploop",
+      "source": "./",
+      "description": "Autonomous delivery skills — pitch an idea, get an MVP. CEO/PO/DEV/Reviewer agent team with contracts, gates, and evidence rules.",
+      "author": {
+        "name": "Bechstein.Digital Ecommerce UG"
+      },
+      "homepage": "https://github.com/BechsteinDigital/claude-shiploop",
+      "license": "MIT",
+      "keywords": [
+        "claude-code",
+        "skills",
+        "autonomous-agents",
+        "multi-agent",
+        "mvp"
+      ]
+    }
+  ]
+}

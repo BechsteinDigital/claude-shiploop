@@ -22,7 +22,7 @@ constitution; `project/STATE.md` the single state store.
    executed on the package branch with a clean orchestrator tree (commit your own `project/` changes such as
    `STATE.md`/`IDEAS.md` first, so only package changes land in the check):
    `<skills-dir>/_shared/scripts/merge-check.sh <base> --zone <card-zone>… --allow project/backlog/<WORK-NNN>.md --allow project/PROFILE.md --test-cmd "<full test from PROFILE>"`
-   — `<skills-dir>` is the installation location of these skills (project-local `.claude/skills/`, global `~/.claude/skills/`).
+   — `<skills-dir>` is the installation location of these skills (project-local `.claude/skills/`, global `~/.claude/skills/`, or the plugin root when installed via `/plugin install`).
    **No broad `--allow project/`:** that would wave through DEV changes to `STATE.md`, `BRIEF.md`, or `IDEAS.md`.
    Allowed are only the package's own card (evidence) and `PROFILE.md` (command maintenance);
    for special cases the check knows `--deny` (overrides zone and allow).

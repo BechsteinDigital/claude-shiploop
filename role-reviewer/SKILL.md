@@ -11,7 +11,7 @@ No refactoring, no reimplementation, no whole-project review.
 
 ## Required input
 1. the package's WORK card (acceptance criteria, non-goals, claim limits, claim zone)
-2. compact diff scan: `<skills-dir>/_shared/scripts/compact-diff-scan.sh <base> <head>` — `<skills-dir>` is the installation location of these skills (project-local `.claude/skills/`, global `~/.claude/skills/`); risk regex from `project/PROFILE.md`
+2. compact diff scan: `<skills-dir>/_shared/scripts/compact-diff-scan.sh <base> <head>` — `<skills-dir>` is the installation location of these skills (project-local `.claude/skills/`, global `~/.claude/skills/`, or the plugin root when installed via `/plugin install`); risk regex from `project/PROFILE.md`
 3. `project/PROFILE.md` — quality rules, architecture overview
 4. DEV output (TESTS/CAVEATS/ZONE)
 

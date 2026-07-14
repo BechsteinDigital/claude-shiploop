@@ -28,6 +28,15 @@ criteria you explicitly agreed to.
 
 ## Quickstart
 
+**As a plugin (recommended):** inside Claude Code, run
+
+```
+/plugin marketplace add BechsteinDigital/claude-shiploop
+/plugin install claude-shiploop@bechstein-digital
+```
+
+**Or via install script:**
+
 ```bash
 git clone https://github.com/BechsteinDigital/claude-shiploop.git
 cd claude-shiploop
@@ -109,6 +118,9 @@ The global knowledge base stays in this repo (single source, never installed int
 `install.sh` records its absolute path in the installation (`_shared/knowledge.path`), so skills
 find it from any project — no fixed clone location required. If you move the repo, re-run
 `./install.sh`, or override via `export SKILLS_KNOWLEDGE_DIR=<repo>/_shared/knowledge`.
+
+When installed as a plugin, there is no `knowledge.path` (the plugin cache is ephemeral):
+learnings then stay project-local, unless you clone this repo and set `SKILLS_KNOWLEDGE_DIR`.
 
 **Operational note:** always start the Claude Code session **in the target project** — subagents
 cannot write outside the session root. For the autonomous loop, DEV subagents need a permission

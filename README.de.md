@@ -28,6 +28,15 @@ Arbeitspakete und orchestriert Rollen-Agenten parallel bis zum MVP-Gate — eska
 
 ## Quickstart
 
+**Als Plugin (empfohlen):** in Claude Code ausführen
+
+```
+/plugin marketplace add BechsteinDigital/claude-shiploop
+/plugin install claude-shiploop@bechstein-digital
+```
+
+**Oder per Install-Skript:**
+
 ```bash
 git clone https://github.com/BechsteinDigital/claude-shiploop.git
 cd claude-shiploop
@@ -112,6 +121,9 @@ Die globale Wissensbasis bleibt in diesem Repo (eine Quelle, wird nie in Projekt
 die Skills sie aus jedem Projekt finden — kein fester Clone-Ort nötig. Wird das Repo verschoben:
 `./install.sh` erneut ausführen oder per `export SKILLS_KNOWLEDGE_DIR=<repo>/_shared/knowledge`
 übersteuern.
+
+Bei Installation als Plugin gibt es kein `knowledge.path` (der Plugin-Cache ist flüchtig):
+Learnings bleiben dann projektlokal — außer man clont dieses Repo und setzt `SKILLS_KNOWLEDGE_DIR`.
 
 **Betriebshinweis:** Die Claude-Code-Session immer **im Zielprojekt** starten — Subagenten können
 außerhalb des Session-Roots nicht schreiben. Für den autonomen Loop brauchen DEV-Subagenten einen
