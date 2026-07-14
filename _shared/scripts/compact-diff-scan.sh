@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Kompakter Diff-Scan: Scope -> Größe -> Risiko-Kandidaten -> Hunk-Header.
-# Sprachunabhängig. Risiko-Regex per 5. Argument oder Default überschreibbar.
+# Compact diff scan: scope -> size -> risk candidates -> hunk headers.
+# Language-agnostic. Risk regex overridable via 5th argument or default.
 set -euo pipefail
 
 base_ref="${1:-main}"
@@ -12,7 +12,7 @@ risk_regex="${5:-(auth|secur|crypt|secret|password|token|payment|lock|mutex|thre
 range="${base_ref}...${head_ref}"
 
 for ref in "$base_ref" "$head_ref"; do
-  git rev-parse --verify "$ref" >/dev/null 2>&1 || { echo "Ref nicht gefunden: $ref" >&2; exit 1; }
+  git rev-parse --verify "$ref" >/dev/null 2>&1 || { echo "Ref not found: $ref" >&2; exit 1; }
 done
 
 echo "Range: $range"
@@ -20,18 +20,18 @@ echo
 echo "1) Scope (name-only, top $max_files)"
 git diff --name-only "$range" | sed '/^$/d' | head -n "$max_files"
 echo
-echo "2) Größe (numstat, top $max_files)"
+echo "2) Size (numstat, top $max_files)"
 git diff --numstat "$range" | head -n "$max_files"
 echo
-echo "3) Risiko-Kandidaten"
+echo "3) Risk candidates"
 high_risk="$(git diff --name-only "$range" | grep -iE "$risk_regex" || true)"
 if [[ -z "$high_risk" ]]; then
-  echo "(keine Treffer für Risiko-Regex)"
+  echo "(no matches for risk regex)"
 else
   printf "%s\n" "$high_risk" | head -n "$max_files"
 fi
 echo
-echo "4) Hunk-Header (Risiko zuerst, sonst alle)"
+echo "4) Hunk headers (risk first, otherwise all)"
 
 declare -a files_to_scan=()
 src="${high_risk:-$(git diff --name-only "$range" | sed '/^$/d')}"

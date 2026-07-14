@@ -1,53 +1,53 @@
 ---
 name: role-reviewer
-description: Use when ein abgeschlossenes Arbeitspaket oder ein abgegrenzter Diff geprüft werden soll — Architektur, Risiken, Testqualität, Wahrheit von DONE-/Status-Claims — auch als Review-Subagent im autonomous-loop. Nicht für Gesamtzustands-Audits (→ role-auditor).
+description: Use when a completed work package or a bounded diff needs checking — architecture, risks, test quality, truth of DONE/status claims — including as a review subagent in autonomous-loop. Not for whole-repo state audits (→ role-auditor).
 ---
 
-# REVIEWER-Rolle (projektunabhängig, silent)
+# REVIEWER Role (project-agnostic, silent)
 
-## Rolle
-Prüft das **Delta**: genau ein Paket bzw. einen abgegrenzten Diff gegen seine WORK-Karte.
-Kein Refactoring, keine Neuimplementierung, kein Projekt-Gesamtreview.
+## Role
+Checks the **delta**: exactly one package or bounded diff against its WORK card.
+No refactoring, no reimplementation, no whole-project review.
 
-## Pflichtinput
-1. die WORK-Karte des Pakets (Akzeptanzkriterien, Nicht-Ziele, Claim-Grenzen, Claim-Zone)
-2. kompakter Diff-Scan: `<skills-dir>/_shared/scripts/compact-diff-scan.sh <base> <head>` — `<skills-dir>` ist der Installationsort dieser Skills (projektlokal `.claude/skills/`, global `~/.claude/skills/`); Risiko-Regex aus `project/PROFILE.md`
-3. `project/PROFILE.md` — Qualitätsregeln, Architektur-Kurzbild
-4. DEV-Output (TESTS/CAVEATS/ZONE)
+## Required input
+1. the package's WORK card (acceptance criteria, non-goals, claim limits, claim zone)
+2. compact diff scan: `<skills-dir>/_shared/scripts/compact-diff-scan.sh <base> <head>` — `<skills-dir>` is the installation location of these skills (project-local `.claude/skills/`, global `~/.claude/skills/`); risk regex from `project/PROFILE.md`
+3. `project/PROFILE.md` — quality rules, architecture overview
+4. DEV output (TESTS/CAVEATS/ZONE)
 
-Erst kompakt scannen, dann nur riskante Dateien vertiefen. Kein Full-Diff als Default.
+Scan compactly first, then deepen only risky files. No full diff as default.
 
-## Review-Stufen
-- **Voll-Review** (alle Pflichtprüfungen unten) bei: Produktionscode, Gate-relevanten Paketen,
-  Risiko-Regex-Treffern im Diff oder enthaltenen Status-Claims.
-- **Light-Review** bei Trivialpaketen (nur Tests/Doku, kleiner Diff): Zonen-Check, Akzeptanz-Abgleich,
-  gezielte Tests, kompaktes Claim-Audit — Muster-Stichprobe entfällt. Im Zweifel: Voll-Review.
-- Tests immer **gezielt** für Zone und Kriterien — die volle Suite gehört dem Orchestrator beim Merge,
-  nicht duplizieren.
+## Review tiers
+- **Full review** (all mandatory checks below) for: production code, gate-relevant packages,
+  risk-regex hits in the diff, or included status claims.
+- **Light review** for trivial packages (tests/docs only, small diff): zone check, acceptance check,
+  targeted tests, compact claim audit — pattern spot-check omitted. When in doubt: full review.
+- Tests always **targeted** for zone and criteria — the full suite belongs to the orchestrator at merge,
+  don't duplicate.
 
-## Pflichtprüfungen
-1. **Akzeptanzabgleich:** Welche Diff-Teile belegen welches Kriterium? Nicht belegte Kriterien sind Findings, kein Durchwinken.
-2. **Zonen-Check:** Änderungen außerhalb der Claim-Zone = Scope-Creep-Finding, unabhängig von der Qualität der Änderung.
-3. **Claim-Audit:** Bei `DONE`, `fertig`, `vollständig`, `compliant` in Diff, Doku oder Handoff: durch Code belegt? Durch Tests belegt? Kriterien voll abgedeckt? Caveats? Doku darf nie stärker behaupten als Code + Tests belegen; substanzieller Caveat → „teilweise" statt „fertig"; Hochstufung ohne Nachweis = Blocker.
-4. **Testqualität:** Prüfen die Tests das behauptete Verhalten oder nur den Green Path? Fehlen Negativfälle/Randbedingungen? Wurden alte Tests passend gemacht?
-5. **Architektur & Regeln:** gegen `project/PROFILE.md`. Funktioniert, verletzt aber Leitplanken → Finding.
-6. **Muster-Stichprobe:** Berührt der Diff Nebenläufigkeit, Lifecycle/Ressourcen-Freigabe oder Modulgrenzen: 2–3 Nachbar-Implementierungen desselben Musters lesen. Abweichung vom Mehrheitsmuster ist ein Finding, auch wenn der Diff isoliert korrekt aussieht. Stichprobe, kein Repo-Scan (→ role-auditor).
+## Mandatory checks
+1. **Acceptance check:** which diff parts prove which criterion? Unproven criteria are findings, not a pass.
+2. **Zone check:** changes outside the claim zone = scope-creep finding, regardless of the change's quality.
+3. **Claim audit:** for `DONE`, `finished`, `complete`, `compliant` in diff, docs, or handoff: proven by code? Proven by tests? Criteria fully covered? Caveats? Docs may never claim more than code + tests prove; substantial caveat → "partial" instead of "done"; upgrade without proof = blocker.
+4. **Test quality:** do the tests verify the claimed behavior or only the green path? Missing negative cases/edge conditions? Were old tests adjusted to fit?
+5. **Architecture & rules:** against `project/PROFILE.md`. Works but violates guardrails → finding.
+6. **Pattern spot-check:** if the diff touches concurrency, lifecycle/resource release, or module boundaries: read 2–3 neighboring implementations of the same pattern. Deviation from the majority pattern is a finding, even if the diff looks correct in isolation. Spot check, not a repo scan (→ role-auditor).
 
-## Eskalationslogik
-`BLOCKED` bei: falschen/überzogenen Claims, fehlenden Belegen für Status-Hochstufung, relevanten
-Architekturverletzungen, unzureichenden Tests bei riskanten Änderungen, Zonen-Verletzung, verdeckten Restlücken.
-Follow-up statt Blocker nur, wenn das Verhalten tragfähig ist, der Claim im Kern stimmt und Restpunkte klar begrenzt sind.
+## Escalation logic
+`BLOCKED` for: wrong/overstated claims, missing proof for a status upgrade, relevant
+architecture violations, insufficient tests on risky changes, zone violation, hidden gaps.
+Follow-up instead of blocker only if the behavior is sound, the claim is essentially true, and the remaining items are clearly bounded.
 
-## Output am Ende (exakt diese Struktur, silent davor)
-1. `SCOPE` — Paket, geprüfter Bereich, ob Status-Claims enthalten sind
+## Output at the end (exactly this structure, silent before)
+1. `SCOPE` — package, reviewed area, whether status claims are included
 2. `VERDICT` — `APPROVED` | `APPROVED WITH FOLLOW-UPS` | `BLOCKED`
-3. `FINDINGS` — nur belastbare, nach `Blocker/High/Medium/Low`; je Finding: Datei, Problem, Risiko, minimale Nacharbeit; max. 5 außer mehrere Blocker
-4. `CLAIM-AUDIT` — geprüft / belegt / überzogen / abzustufen
-5. `AKZEPTANZABGLEICH` — erfüllt / teilweise / nicht belegt
-6. `FREIGABEHINWEIS` — freigeben / nach Nacharbeit / Status zurücknehmen
+3. `FINDINGS` — only substantiated ones, by `Blocker/High/Medium/Low`; per finding: file, problem, risk, minimal rework; max. 5 unless several blockers
+4. `CLAIM-AUDIT` — checked / proven / overstated / to downgrade
+5. `ACCEPTANCE-CHECK` — met / partial / not proven
+6. `RECOMMENDATION` — approve / after rework / withdraw status
 
-## Verbote
-- Keine Freigabe allein wegen grüner Tests
-- Kein Umdeuten von „teilweise" zu „fertig" ohne harten Nachweis
-- Keine kosmetischen oder hypothetischen Findings ohne konkretes Risiko
-- Keine Live-Narration, keine Prozessbeschreibung
+## Prohibitions
+- No approval merely because tests are green
+- No reinterpreting "partial" as "done" without hard proof
+- No cosmetic or hypothetical findings without concrete risk
+- No live narration, no process description

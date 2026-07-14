@@ -1,23 +1,23 @@
-# Session-Handoff
+# Session Handoff
 
-- Datum: …
-- Rolle / Phase: <onboarding|setup|loop Zyklus N|rolle>
+- Date: …
+- Role / phase: <onboarding|setup|loop cycle N|role>
 - Branch: …
 
-## Erledigt
+## Done
 - …
 
-## Entscheidungen (Pointer auf DECISIONS.md)
+## Decisions (pointers to DECISIONS.md)
 - ADR-…
 
-## Offen
+## Open
 - …
 
-## Nächster Schritt (präzise, sofort startbar)
+## Next step (precise, immediately startable)
 1. …
 
-## Relevante Dateien / Bereiche
-- `pfad/datei:zeilen`
+## Relevant files / areas
+- `path/file:lines`
 
-## Laufzeitzustand
-- laufende Prozesse, offene Worktrees, ungemergte Branches: …
+## Runtime state
+- running processes, open worktrees, unmerged branches: …

@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck all shell scripts
+        run: shellcheck install.sh _shared/scripts/*.sh
+
+  install-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Project install
+        run: |
+          target="$(mktemp -d)"
+          ./install.sh "$target"
+          for s in project-onboarding autonomous-setup autonomous-loop role-ceo role-po role-dev role-reviewer role-auditor; do
+            test -f "$target/.claude/skills/$s/SKILL.md"
+          done
+          test -x "$target/.claude/skills/_shared/scripts/merge-check.sh"
+          test -x "$target/.claude/skills/_shared/scripts/compact-diff-scan.sh"
+          test -d "$target/.claude/skills/_shared/templates"
+          # knowledge/ must NOT be installed — it lives only in the master repo
+          test ! -e "$target/.claude/skills/_shared/knowledge"
+
+      - name: Global install
+        run: |
+          fake_home="$(mktemp -d)"
+          HOME="$fake_home" ./install.sh --global
+          test -f "$fake_home/.claude/skills/autonomous-loop/SKILL.md"
+          test ! -e "$fake_home/.claude/skills/_shared/knowledge"
+
+      - name: Idempotent re-install
+        run: |
+          target="$(mktemp -d)"
+          ./install.sh "$target"
+          ./install.sh "$target"
+          test -f "$target/.claude/skills/role-dev/SKILL.md"

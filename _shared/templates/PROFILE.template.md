@@ -1,36 +1,36 @@
-# Projektprofil (technisch)
+# Project Profile (technical)
 
-Gepflegt von `autonomous-setup`. Rollen-Skills lesen Kommandos und Regeln NUR hier — nie raten,
-nie aus anderen Projekten übernehmen. Ein Kommando steht erst hier, wenn es einmal erfolgreich lief.
+Maintained by `autonomous-setup`. Role skills read commands and rules ONLY here — never guess,
+never carry over from other projects. A command is only listed here after it ran successfully once.
 
 ## Stack
-- Sprache(n): …
-- Framework(s) / Runtime: …
-- Paketmanager: …
-- Begründung: siehe `project/DECISIONS.md` ADR-…
+- Language(s): …
+- Framework(s) / runtime: …
+- Package manager: …
+- Rationale: see `project/DECISIONS.md` ADR-…
 
-## Kommandos (verifiziert am <Datum>)
+## Commands (verified on <date>)
 - Setup: `…`
 - Build: `…`
-- Test (gezielt): `…`
-- Test (voll): `…`
-- Lint / Format: `…`
-- Start / Run: `…`
+- Test (targeted): `…`
+- Test (full): `…`
+- Lint / format: `…`
+- Start / run: `…`
 
-## Architektur-Kurzbild
-- Schnitt / Schichten: …
-- Modul- bzw. Verzeichnisgrenzen: …
-- Subsysteme (für Auditor-Fan-out): …
+## Architecture overview
+- Cut / layers: …
+- Module and directory boundaries: …
+- Subsystems (for auditor fan-out): …
 
-## Qualitätsregeln
-Defaults — projektspezifische Regeln hier ergänzen oder überschreiben:
-- Dateien klein halten (< ~500 Zeilen bevorzugt).
-- Fehler nie stumm schlucken; kritische Pfade loggen.
-- Keine Secrets im Code oder in Commits.
-- Tests belegen Verhalten — Testgrün allein ist kein DONE-Beweis.
-- Doku behauptet nie mehr als Code + Tests belegen.
-- Öffentliche Schnittstellen dokumentieren.
+## Quality rules
+Defaults — add or override project-specific rules here:
+- Keep files small (< ~500 lines preferred).
+- Never swallow errors silently; log critical paths.
+- No secrets in code or commits.
+- Tests prove behavior — green tests alone are no DONE proof.
+- Docs never claim more than code + tests prove.
+- Document public interfaces.
 
-## Risiko-Muster (für Diff-Scan)
-Projektspezifisch anpassen. Default-Regex:
+## Risk patterns (for diff scan)
+Adapt per project. Default regex:
 `(auth|secur|crypt|secret|password|token|payment|lock|mutex|thread|async|concurren|migration|schema|config|deploy|public|export)`

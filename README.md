@@ -1,73 +1,118 @@
-# Autonomous Delivery Skills
+# claude-shiploop
 
-Projekt- und sprachunabhängige Skill-Suite für Claude Code: vom Idee-Pitch über autonomes Setup
-bis zum parallelen, selbstkontrollierten Delivery-Loop.
+**English** · [Deutsch](README.de.md)
 
-Entstanden als Generalisierung der `sdk-*`-Skills aus dem VoIP-Projekt — ohne deren
-Hardcodings (.NET-Kommandos, CORE-Karten, projektfeste Pfade, doppelte Budget-Quellen).
+[![CI](https://github.com/BechsteinDigital/claude-shiploop/actions/workflows/ci.yml/badge.svg)](https://github.com/BechsteinDigital/claude-shiploop/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## Ablauf
+**Autonomous delivery skills for Claude Code — pitch an idea, get an MVP.**
+A project- and language-agnostic skill suite: from an idea pitch through
+autonomous setup to a parallel, self-controlled delivery loop — with contracts, gates, and
+evidence rules instead of hope.
+
+**Proven end-to-end:** full run from pitch → interview → setup → 3 loop cycles
+(2 DEV agents in parallel) → MVP gate on a real project (`standup` CLI, 36/36 tests passing).
+
+## How it works
 
 ```
-Pitch ──▶ project-onboarding ──▶ autonomous-setup ──▶ autonomous-loop ──▶ MVP-Report
-          (einziger inter-        (Research, Stack,     (CEO→PO→DEV∥DEV→REVIEWER,
-           aktiver Schritt)        Scaffold, Backlog)     Ideen-Trichter, Gates)
+Pitch ──▶ project-onboarding ──▶ autonomous-setup ──▶ autonomous-loop ──▶ MVP report
+          (the only inter-        (research, stack,     (CEO→PO→DEV∥DEV→REVIEWER,
+           active step)            scaffold, backlog)     idea funnel, gates)
 ```
 
-## Skills
+You pitch an idea and answer the onboarding interview once. Everything after that runs
+autonomously: the suite researches, picks a stack, scaffolds the project, cuts work packages,
+and orchestrates role agents in parallel until the MVP gate — escalating to you only on
+criteria you explicitly agreed to.
 
-| Skill | Zweck |
+## Quickstart
+
+```bash
+git clone https://github.com/BechsteinDigital/claude-shiploop.git
+cd claude-shiploop
+./install.sh /path/to/your/project    # or: ./install.sh --global
+```
+
+Then start a Claude Code session **inside the target project** and pitch your idea —
+`project-onboarding` picks it up from there.
+
+## The skills
+
+| Skill | Purpose |
 |---|---|
-| `project-onboarding` | Pitch-Interview bis Definition of Ready; erzeugt freigegebenen Brief inkl. Kernvertrag und Autonomievertrag |
-| `autonomous-setup` | Bootstrapping ohne Rückfragen: Research, ADRs, Scaffold, Backlog |
-| `autonomous-loop` | Orchestriert Rollen als (parallele) Subagenten bis MVP-Gate |
-| `role-ceo` | Portfolio-Entscheidungen, Gates, WIP, Anti-Thrash |
-| `role-po` | Paket-Zuschnitt, Akzeptanzkriterien, Claim-Zonen, **Ideen-Triage (Wertfilter)** |
-| `role-dev` | Implementiert genau ein Paket, silent, Evidenz-Output |
-| `role-reviewer` | Delta-Review: Akzeptanz, Claim-Audit, Zonen-Check |
-| `role-auditor` | Zustands-Audit per parallelem read-only Fan-out |
+| `project-onboarding` | Pitch interview to Definition of Ready; produces an approved brief incl. core contract and autonomy contract |
+| `autonomous-setup` | Bootstrapping without questions: research, ADRs, scaffold, backlog |
+| `autonomous-loop` | Orchestrates roles as (parallel) subagents until the MVP gate |
+| `role-ceo` | Portfolio decisions, gates, WIP, anti-thrash |
+| `role-po` | Work-package cutting, acceptance criteria, claim zones, **idea triage (value filter)** |
+| `role-dev` | Implements exactly one package, silent, evidence output |
+| `role-reviewer` | Delta review: acceptance, claim audit, zone check |
+| `role-auditor` | State audit via parallel read-only fan-out |
 
-## Projekt-Artefakte (im Zielprojekt, von den Skills erzeugt)
+## Why this and not a loose skill collection?
+
+Most skill collections are toolboxes — you still drive. This suite is an operating model:
+
+- **Autonomy with a contract:** escalation to the user only via explicitly agreed criteria;
+  everything else gets decided and logged.
+- **Focus as mechanics, not appeals:** value filter, cooling-off, idea-chain rule, extension
+  budget — prohibitions alone don't keep an autonomous loop on course.
+- **Claims need evidence:** documentation may never claim more than code + tests prove.
+- **Parallelism via claim zones:** disjoint file zones per package; worktree isolation when in doubt.
+
+## Project artifacts (created in the target project)
 
 ```
 project/
-  BRIEF.md        Produktbrief + Kernvertrag + Autonomievertrag (Verfassung)
-  PROFILE.md      Stack, verifizierte Kommandos, Qualitätsregeln (einzige Kommando-Quelle)
-  STATE.md        einziger Zustandsspeicher (WIP, Milestone, Budget, Zyklus)
-  DECISIONS.md    ADR-light-Log autonomer Entscheidungen
-  IDEAS.md        Ideen-Trichter mit Triage-Regeln
-  LEARNINGS.md    Retro-Destillat dieses Projekts (Gate-Pflicht)
-  backlog/        WORK-Karten (inkl. Claim-Zone + Komplexität)
-  log/            Research-, Audit-, Zyklus-Logs
+  BRIEF.md        product brief + core contract + autonomy contract (the constitution)
+  PROFILE.md      stack, verified commands, quality rules (single source for commands)
+  STATE.md        single state store (WIP, milestone, budget, cycle)
+  DECISIONS.md    ADR-light log of autonomous decisions
+  IDEAS.md        idea funnel with triage rules
+  LEARNINGS.md    retro distillate of this project (gate requirement)
+  backlog/        WORK cards (incl. claim zone + complexity)
+  log/            research, audit, and cycle logs
 ```
 
-## Design-Prinzipien
-1. **Eine Quelle pro Wahrheit:** Kommandos nur in `PROFILE.md`, Zustand nur in `STATE.md` — keine Snapshot-Duplikate, die driften.
-2. **Fokus als Mechanik, nicht als Appell:** Wertfilter, Cooling-off, Ideen-Ketten-Regel, Erweiterungsbudget — Verbote allein halten keinen autonomen Loop auf Kurs.
-3. **Autonomie mit Vertrag:** Eskalation an den User nur über explizit vereinbarte Kriterien; alles andere wird entschieden und geloggt.
-4. **Parallelität über Claim-Zonen:** disjunkte Dateizonen je Paket; bei Unsicherheit Worktree-Isolation.
-5. **Claims brauchen Evidenz:** Doku darf nie mehr behaupten als Code + Tests belegen (aus der sdk-Suite übernommen — deren stärkstes Element).
-6. **Modell-Hierarchie:** Teure Tokens dorthin, wo geurteilt wird (Orchestrator, PO-Schnitt, Gate-Reviews); günstige dorthin, wo ausgeführt wird (DEV/Review nach Karten-Komplexität, Auditor-Fan-out). Die Kartenqualität macht kleine Modelle sicher — deshalb wird am PO nie gespart.
-7. **Erfahrungswissen als Destillat:** Retro am Milestone-Gate → max. 3–5 Learnings nach `project/LEARNINGS.md`, Generalisierbares in die globale KB `_shared/knowledge/` (nur am Master-Ort, wird nicht mitinstalliert). Setup und Reviews lesen sie — jedes Projekt startet mit der Erfahrung aller vorherigen.
+## Design principles
 
-## Installation in ein Projekt
+1. **One source per truth:** commands only in `PROFILE.md`, state only in `STATE.md` — no
+   snapshot duplicates that drift.
+2. **Focus as mechanics, not as appeal:** value filter, cooling-off, idea-chain rule, extension
+   budget — prohibitions alone don't keep an autonomous loop on course.
+3. **Autonomy with a contract:** escalation to the user only via explicitly agreed criteria;
+   everything else is decided and logged.
+4. **Parallelism via claim zones:** disjoint file zones per package; worktree isolation when
+   uncertain.
+5. **Claims need evidence:** documentation may never claim more than code + tests prove.
+6. **Model hierarchy:** expensive tokens where judgment happens (orchestrator, PO cutting, gate
+   reviews); cheap tokens where execution happens (DEV/review by card complexity, auditor
+   fan-out). Card quality is what makes small models safe — which is why the PO is never
+   downgraded.
+7. **Experience as distillate:** retro at the milestone gate → max. 3–5 learnings into
+   `project/LEARNINGS.md`, generalizable ones into the global KB `_shared/knowledge/` (master
+   location only, not installed into projects). Setup and reviews read them — every project
+   starts with the experience of all previous ones.
+
+## Installation details
 
 ```bash
-./install.sh /pfad/zum/projekt
+./install.sh /path/to/project    # copies skills + _shared/ to <project>/.claude/skills/
+./install.sh --global            # installs to ~/.claude/skills/ for all projects
 ```
 
-Kopiert alle Skills + `_shared/` nach `<projekt>/.claude/skills/`. Alternativ für globale
-Nutzung in alle Projekte: `./install.sh --global` (legt sie unter `~/.claude/skills/` ab).
-Die Skills referenzieren die Skripte in `_shared/scripts/` relativ zum Installationsort —
-beide Varianten funktionieren.
+The skills reference the scripts in `_shared/scripts/` relative to the installation location —
+both variants work.
 
-Liegt dieses Master-Repo nicht unter `~/Projekte/Skills`, die globale Wissensbasis per
-Env-Variable bekanntmachen: `export SKILLS_KNOWLEDGE_DIR=<repo>/_shared/knowledge`.
+If this master repo does not live at `~/Projekte/Skills`, expose the global knowledge base via
+an environment variable: `export SKILLS_KNOWLEDGE_DIR=<repo>/_shared/knowledge`.
 
-**Betriebshinweis:** Die Claude-Code-Session immer **im Zielprojekt** starten — Subagenten können
-außerhalb des Session-Roots nicht schreiben. Für den autonomen Loop brauchen DEV-Subagenten einen
-Permission-Mode ohne interaktive Prompts (`acceptEdits`/`bypassPermissions`), sonst blockiert
-jeder Write, während niemand zusieht.
+**Operational note:** always start the Claude Code session **in the target project** — subagents
+cannot write outside the session root. For the autonomous loop, DEV subagents need a permission
+mode without interactive prompts (`acceptEdits`/`bypassPermissions`), otherwise every write
+blocks while nobody is watching.
 
-E2E-validiert am 2026-07-11: kompletter Durchlauf Pitch → Interview → Setup → 3 Loop-Zyklen
-(2 DEVs parallel) → MVP-Gate mit einem realen Projekt (`standup`-CLI, 36/36 Tests).
+## License
+
+[MIT](LICENSE)

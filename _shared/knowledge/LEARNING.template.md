@@ -1,7 +1,7 @@
-# <Regel in einem Satz>
+# <rule in one sentence>
 
-- Status: aktiv
-- Kontext: <wann/wo relevant — Projekttyp, Phase, Technologie>
-- Regel: <die eigentliche Handlungsanweisung, prüfbar formuliert>
-- Warum: <Beleg — Projekt, Datum, was passiert ist / gekostet hat>
-- Anwendung: <wer wendet sie wann an — Setup, PO, DEV, Reviewer, Loop>
+- Status: active
+- Context: <when/where relevant — project type, phase, technology>
+- Rule: <the actual instruction, phrased verifiably>
+- Why: <evidence — project, date, what happened / what it cost>
+- Application: <who applies it when — setup, PO, DEV, reviewer, loop>

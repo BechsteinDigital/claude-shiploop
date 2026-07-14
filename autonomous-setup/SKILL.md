@@ -1,55 +1,55 @@
 ---
 name: autonomous-setup
-description: Use when ein freigegebener Produktbrief (project/BRIEF.md, Status FREIGEGEBEN) existiert und das Projekt ohne weitere User-Eingaben aufgesetzt werden soll — Research, Tech-Entscheidungen, Scaffold, Backlog. Nicht verwenden, solange der Brief fehlt oder ENTWURF ist (→ project-onboarding).
+description: Use when an approved product brief (project/BRIEF.md, status APPROVED) exists and the project should be set up without further user input — research, tech decisions, scaffold, backlog. Do not use while the brief is missing or DRAFT (→ project-onboarding).
 ---
 
-# Autonomes Setup
+# Autonomous Setup
 
-## Grundsatz
-Ab hier **keine Fragen an den User**. Jede offene Entscheidung wird selbst getroffen und in
-`project/DECISIONS.md` als ADR geloggt. Einzige Ausnahmen: die Eskalationskriterien aus dem
-Autonomievertrag in `project/BRIEF.md`.
+## Principle
+From here on, **no questions to the user**. Every open decision is made autonomously and logged in
+`project/DECISIONS.md` as an ADR. Only exceptions: the escalation criteria from the
+autonomy contract in `project/BRIEF.md`.
 
-## Vorbedingung
-`project/BRIEF.md` existiert mit Status FREIGEGEBEN. Sonst abbrechen und `project-onboarding` verlangen.
+## Precondition
+`project/BRIEF.md` exists with status APPROVED. Otherwise abort and request `project-onboarding`.
 
-## Phasen
+## Phases
 
 ### 1. Research (timeboxed, parallel)
-Zuerst die globale Wissensbasis lesen (`$SKILLS_KNOWLEDGE_DIR`, sonst Default
-`~/Projekte/Skills/_shared/knowledge/`; existiert keins von beiden → überspringen) —
-dokumentierte Learnings aus früheren Projekten ersetzen Recherche und verhindern Wiederholungsfehler.
+First read the global knowledge base (`$SKILLS_KNOWLEDGE_DIR`, otherwise default
+`~/Projekte/Skills/_shared/knowledge/`; if neither exists → skip) —
+documented learnings from earlier projects replace research and prevent repeat mistakes.
 
-Dann parallele read-only Subagenten in einem Aufruf-Block, je Frage einer:
-- **Alternativen:** Was existiert bereits? Was macht es nicht gut genug? (bestätigt/schärft den Kernvertrag)
-- **Tech-Optionen:** 2–3 Stack-Kandidaten passend zu Muss-Ergebnissen, Zielumgebung und Kostenrahmen — mit Trade-offs, nicht mit Gewinner
-- **Risiken:** rechtliche, technische und Kosten-Fallen der Domäne
+Then parallel read-only subagents in one invocation block, one per question:
+- **Alternatives:** What already exists? What does it not do well enough? (confirms/sharpens the core contract)
+- **Tech options:** 2–3 stack candidates fitting the must-have outcomes, target environment, and cost frame — with trade-offs, not with a winner
+- **Risks:** legal, technical, and cost traps of the domain
 
-Ergebnisse nach `project/log/<datum>-research-<thema>.md`. Research-Funde, die neue Features
-nahelegen, gehen in `project/IDEAS.md` — **nie** direkt in den Scope.
+Results go to `project/log/<date>-research-<topic>.md`. Research findings that suggest new features
+go into `project/IDEAS.md` — **never** directly into scope.
 
-### 2. Entscheiden
-Stack, Architektur-Schnitt und Projektstruktur festlegen: je ein ADR in `project/DECISIONS.md`
-(Entscheidung, Alternativen, Begründung, Umkehrkosten). Bei Gleichstand entscheidet: geringste
-Komplexität für die Muss-Ergebnisse — nicht die interessanteste Technologie.
+### 2. Decide
+Determine stack, architecture cut, and project structure: one ADR each in `project/DECISIONS.md`
+(decision, alternatives, rationale, reversal cost). On a tie, the decider is: least
+complexity for the must-have outcomes — not the most interesting technology.
 
 ### 3. Scaffold
-- Repo initialisieren (falls nicht vorhanden), Grundgerüst gemäß ADRs, `.gitignore`, minimale README.
-- `project/PROFILE.md` nach `_shared/templates/PROFILE.template.md` anlegen.
-  **Jedes Kommando (Build, Test, Lint, Run) erst eintragen, nachdem es einmal erfolgreich lief.**
-- Ein Walking Skeleton reicht: baubar, testbar, startbar. Keine Feature-Implementierung im Setup.
+- Initialize the repo (if not present), skeleton per the ADRs, `.gitignore`, minimal README.
+- Create `project/PROFILE.md` from `_shared/templates/PROFILE.template.md`.
+  **Enter each command (build, test, lint, run) only after it ran successfully once.**
+- A walking skeleton is enough: buildable, testable, startable. No feature implementation during setup.
 
 ### 4. Backlog
-- Je Muss-Ergebnis aus dem Brief mindestens eine WORK-Karte (`project/backlog/`, Template beachten): P0 = kritischer Pfad zum MVP.
-- Karten klein und mit disjunkten Claim-Zonen schneiden, wo möglich — das ermöglicht dem Loop Parallelarbeit.
-- `project/STATE.md` und `project/IDEAS.md` aus den Templates initialisieren.
+- At least one WORK card per must-have outcome from the brief (`project/backlog/`, follow the template): P0 = critical path to MVP.
+- Cut cards small and with disjoint claim zones where possible — that enables the loop to parallelize.
+- Initialize `project/STATE.md` and `project/IDEAS.md` from the templates.
 
-### 5. Abschluss
-Erster Commit (Scaffold + project/-Artefakte). Kurzer Setup-Report in `project/log/`.
-Danach direkt `autonomous-loop` starten — nicht auf Bestätigung warten.
+### 5. Finish
+First commit (scaffold + project/ artifacts). Short setup report in `project/log/`.
+Then start `autonomous-loop` directly — don't wait for confirmation.
 
-## Rote Flaggen
-- „Ich frag den User kurz, welche Sprache er lieber mag" → Verstoß: entscheiden, loggen, weiter.
-- Research dauert länger als das Scaffold → Timebox verletzt, Entscheidungen mit vorhandenem Wissen treffen.
-- Kommandos im Profil, die nie ausgeführt wurden → Profil lügt, Loop bricht später.
-- Setup implementiert schon Features → gehört in WORK-Karten und den Loop.
+## Red flags
+- "I'll quickly ask the user which language they prefer" → violation: decide, log, continue.
+- Research takes longer than the scaffold → timebox violated; decide with available knowledge.
+- Commands in the profile that never ran → the profile lies, the loop breaks later.
+- Setup already implements features → belongs in WORK cards and the loop.

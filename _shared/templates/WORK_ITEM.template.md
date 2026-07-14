@@ -1,29 +1,29 @@
-# WORK-NNN: <Titel>
+# WORK-NNN: <title>
 
-- Priorität: P0 | P1 | P2
-- Status: OFFEN | AKTIV | REVIEW | FERTIG | BLOCKIERT
-- Bezug: Muss-Ergebnis #<n aus BRIEF> — oder: Erweiterung (IDEAS-Referenz: I-NNN)
-- Claim-Zone (Dateien/Ordner, exklusiv während DEV): `…`
-- Komplexität: S | M | L — plus Marker „heikel" bei Security, Nebenläufigkeit oder öffentlicher API.
-  (PO setzt sie; steuert Modellwahl und Review-Tiefe im Loop)
+- Priority: P0 | P1 | P2
+- Status: OPEN | ACTIVE | REVIEW | DONE | BLOCKED
+- Reference: must-have outcome #<n from BRIEF> — or: extension (IDEAS reference: I-NNN)
+- Claim zone (files/directories, exclusive during DEV): `…`
+- Complexity: S | M | L — plus "sensitive" marker for security, concurrency, or public API.
+  (Set by the PO; drives model choice and review depth in the loop)
 
 ## Problem
-Was konkret offen oder kaputt ist.
+What concretely is open or broken.
 
-## Ziel dieses Pakets
-Das kleinste belastbare Ergebnis dieses Laufs.
+## Goal of this package
+The smallest defensible outcome of this run.
 
-## Nicht Teil dieses Pakets
-Was ausdrücklich nicht gebaut, geändert oder behauptet wird.
+## Not part of this package
+What is expressly not built, changed, or claimed.
 
-## Akzeptanzkriterien (prüfbar, diff-fähig)
+## Acceptance criteria (verifiable, diff-able)
 1. …
 2. …
 
-## Claim-Grenzen
-- erlaubt nach erfolgreicher Umsetzung: …
-- nicht erlaubt: …
+## Claim limits
+- permitted after successful implementation: …
+- not permitted: …
 
-## Evidenz (von DEV / Reviewer gefüllt)
+## Evidence (filled by DEV / reviewer)
 - Tests: …
 - Caveats: …

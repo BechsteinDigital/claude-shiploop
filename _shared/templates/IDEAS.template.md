@@ -1,15 +1,15 @@
-# Ideen-Trichter
+# Idea Funnel
 
-Jede neue Idee landet HIER — nie direkt im Code. Bewertung nur durch PO (role-po).
+Every new idea lands HERE — never directly in code. Evaluation only by the PO (role-po).
 
-## Triage-Regeln
-- **JETZT** nur wenn: Kernbeitrag ≥ 2 **und** Aufwand ≤ M **und** Erweiterungsbudget frei
-  **und** die Idee mindestens einen vollen Zyklus hier lag (Cooling-off).
-- **Ideen 2. Ordnung** (entstanden bei Umsetzung einer bereits akzeptierten Erweiterung): nie JETZT — immer NACH-MVP oder NIE.
-- Kernbeitrag 3 + Aufwand L → CEO-Gate; falls Kernvertrag betroffen → User-Eskalation.
+## Triage rules
+- **NOW** only if: core contribution ≥ 2 **and** effort ≤ M **and** extension budget free
+  **and** the idea sat here for at least one full cycle (cooling-off).
+- **Second-order ideas** (arisen while implementing an already accepted extension): never NOW — always POST-MVP or NEVER.
+- Core contribution 3 + effort L → CEO gate; if the core contract is affected → user escalation.
 
-Kernbeitrag: 0 = keiner · 1 = indirekt · 2 = stärkt ein Muss-Ergebnis direkt · 3 = Kernidee ohne sie unvollständig
+Core contribution: 0 = none · 1 = indirect · 2 = directly strengthens a must-have outcome · 3 = core idea incomplete without it
 
-| ID | Idee | Herkunft (user/research/dev/2.Ordnung) | Kernbeitrag 0–3 | Aufwand S/M/L | Eingetragen (Zyklus) | Entscheidung JETZT/NACH-MVP/NIE | Begründung |
-|----|------|----------------------------------------|-----------------|---------------|----------------------|--------------------------------|------------|
+| ID | Idea | Origin (user/research/dev/2nd-order) | Core contribution 0–3 | Effort S/M/L | Entered (cycle) | Decision NOW/POST-MVP/NEVER | Rationale |
+|----|------|--------------------------------------|-----------------------|--------------|-----------------|-----------------------------|-----------|
 | I-001 | … | … | … | … | … | … | … |

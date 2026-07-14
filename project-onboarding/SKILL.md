@@ -1,56 +1,56 @@
 ---
 name: project-onboarding
-description: Use when der User eine neue Projekt- oder Produktidee pitcht, ein neues Projekt starten will oder ein Onboarding-Interview verlangt — auch bei vagen Ideen („ich hab da eine Idee für eine App"). Einziger interaktiver Skill der Suite; danach läuft alles autonom.
+description: Use when the user pitches a new project or product idea, wants to start a new project, or asks for an onboarding interview — including vague ideas ("I have an idea for an app"). The only interactive skill of the suite; everything after it runs autonomously.
 ---
 
-# Projekt-Onboarding (Pitch-Interview)
+# Project Onboarding (Pitch Interview)
 
-## Ziel
-Aus einem Pitch alle Informationen herausfragen, bis autonomes Arbeiten möglich ist — festgehalten
-als freigegebener `project/BRIEF.md`. Das ist die **letzte** Gelegenheit für Fragen an den User;
-danach übernimmt `autonomous-setup` ohne Rückfragen.
+## Goal
+Extract all information from a pitch until autonomous work is possible — captured as an approved
+`project/BRIEF.md`. This is the **last** opportunity to ask the user questions;
+afterwards `autonomous-setup` takes over without follow-ups.
 
-## Ablauf
+## Process
 
-### 1. Pitch spiegeln
-Idee in 2–3 eigenen Sätzen zurückspiegeln (Kernidee, vermuteter Nutzer, vermutetes Problem).
-Erst wenn der User die Spiegelung bestätigt oder korrigiert hat, mit dem Interview beginnen.
+### 1. Mirror the pitch
+Reflect the idea back in 2–3 of your own sentences (core idea, assumed user, assumed problem).
+Only start the interview once the user has confirmed or corrected the reflection.
 
-### 2. Interview in Runden
-Fragen mit `AskUserQuestion` stellen (max. 4 pro Runde), pro Runde ein Themenblock,
-Runden bauen aufeinander auf. Fragenkatalog: `references/interview-guide.md` — dort
-Runde und Formulierung an die Antworten anpassen, nicht mechanisch abarbeiten.
+### 2. Interview in rounds
+Ask questions with `AskUserQuestion` (max. 4 per round), one topic block per round,
+rounds build on each other. Question catalog: `references/interview-guide.md` — adapt
+round and wording to the answers there; don't work through it mechanically.
 
-Reihenfolge: **A Kern** (Problem, Nutzer, Erfolg) → **B Scope** (Muss-Ergebnisse, Nicht-Ziele,
-kleinste liefernswerte Version) → **C Rahmen** (Zeit, Kosten, Tech-Vorgaben, Plattform) →
-**D Autonomie** (Eskalationsregeln, Erweiterungsbudget, Deployment-Grenzen).
+Order: **A Core** (problem, user, success) → **B Scope** (must-have outcomes, non-goals,
+smallest shippable version) → **C Frame** (time, cost, tech constraints, platform) →
+**D Autonomy** (escalation rules, extension budget, deployment limits).
 
-Regeln:
-- Nach jeder Runde kurz zusammenfassen, was jetzt feststeht.
-- „Weiß nicht" → selbst einen Default vorschlagen und nur bestätigen lassen — nie nachbohren.
-- Technische Detailfragen nur, wenn der User erkennbar technisch ist; sonst Wirkung statt Technik erfragen.
-- Keine Suggestivfragen, die den Scope vergrößern („Wollen Sie nicht auch noch …?"). Das Interview
-  existiert, um den Kern zu schärfen, nicht um Features zu sammeln.
-- Spontane Feature-Einfälle — egal ob vom User („Oh, und X wäre auch cool!") oder vom Interviewer:
-  kurz bestätigen, als Kandidat für `project/IDEAS.md` und ggf. als Nicht-Ziel notieren, **nicht vertiefen**,
-  zurück zum Kern. Nur wenn der User darauf besteht, dass es zum Kern gehört, wird es als Muss-Ergebnis-Kandidat behandelt.
+Rules:
+- After each round, briefly summarize what is now settled.
+- "Don't know" → propose a default yourself and only have it confirmed — never drill deeper.
+- Technical detail questions only if the user is visibly technical; otherwise ask about effect, not technology.
+- No leading questions that grow the scope ("Wouldn't you also like …?"). The interview
+  exists to sharpen the core, not to collect features.
+- Spontaneous feature ideas — whether from the user ("Oh, and X would be cool too!") or the interviewer:
+  acknowledge briefly, note as a candidate for `project/IDEAS.md` and possibly as a non-goal, **don't go deeper**,
+  return to the core. Only if the user insists it belongs to the core is it treated as a must-have-outcome candidate.
 
-### 3. Definition of Ready prüfen
-Checkliste in `references/interview-guide.md#definition-of-ready`. Jeder offene Punkt → gezielte
-Nachfrage-Runde oder markierter Default. Nicht loslegen, solange ein Punkt weder beantwortet noch
-als bestätigter Default gedeckt ist.
+### 3. Check the Definition of Ready
+Checklist in `references/interview-guide.md#definition-of-ready`. Every open item → a targeted
+follow-up round or a marked default. Don't start while any item is neither answered nor
+covered by a confirmed default.
 
-### 4. Brief schreiben und freigeben lassen
-`project/BRIEF.md` nach `_shared/templates/BRIEF.template.md` erstellen (Status: ENTWURF),
-dem User die Kernpunkte kompakt zeigen und **explizite Freigabe** einholen. Erst nach Freigabe:
-Status auf FREIGEGEBEN setzen.
+### 4. Write the brief and get it approved
+Create `project/BRIEF.md` from `_shared/templates/BRIEF.template.md` (status: DRAFT),
+show the user the key points compactly and obtain **explicit approval**. Only after approval:
+set status to APPROVED.
 
-### 5. Übergabe
-Nach Freigabe sofort `autonomous-setup` starten. Ab hier keine Fragen mehr an den User —
-der Autonomievertrag im Brief regelt die einzigen Ausnahmen.
+### 5. Handover
+After approval, start `autonomous-setup` immediately. From here on, no more questions to the user —
+the autonomy contract in the brief governs the only exceptions.
 
-## Rote Flaggen
-- Interview startet ohne bestätigte Spiegelung
-- Mehr als ~4 Runden ohne Zwischenfazit → User ermüdet, Defaults vorschlagen
-- Muss-Ergebnisse, die nicht prüfbar formuliert sind („soll gut aussehen")
-- Setup startet, obwohl der Brief noch ENTWURF ist
+## Red flags
+- Interview starts without a confirmed reflection
+- More than ~4 rounds without an interim summary → user fatigues; propose defaults
+- Must-have outcomes that aren't phrased verifiably ("should look good")
+- Setup starts although the brief is still DRAFT

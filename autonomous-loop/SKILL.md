@@ -1,76 +1,76 @@
 ---
 name: autonomous-loop
-description: Use when ein aufgesetztes Projekt (project/BRIEF.md freigegeben, PROFILE/STATE/Backlog vorhanden) autonom weitergebaut werden soll — Orchestrierung von CEO/PO/DEV/REVIEWER-Zyklen mit parallelen Agenten, ohne User-Eingaben. Auch zum Fortsetzen nach Unterbrechung oder Handoff.
+description: Use when a set-up project (project/BRIEF.md approved, PROFILE/STATE/backlog present) should continue building autonomously — orchestration of CEO/PO/DEV/REVIEWER cycles with parallel agents, without user input. Also for resuming after an interruption or handoff.
 ---
 
-# Autonomer Delivery-Loop
+# Autonomous Delivery Loop
 
-## Grundsatz
-Der Loop orchestriert Rollen als Subagenten und arbeitet ohne User-Eingaben bis MVP-Gate,
-Eskalationskriterium oder Kontextdruck. Der Kernvertrag in `project/BRIEF.md` ist die Verfassung;
-`project/STATE.md` der einzige Zustandsspeicher.
+## Principle
+The loop orchestrates roles as subagents and works without user input until the MVP gate,
+an escalation criterion, or context pressure. The core contract in `project/BRIEF.md` is the
+constitution; `project/STATE.md` the single state store.
 
-## Zyklus (wiederholen)
+## Cycle (repeat)
 
-1. **Sync:** `STATE.md` lesen; Zyklus-Zähler inkrementieren (Basis für Cooling-off) und gegen das Zyklus-Cap prüfen — Cap erreicht → Runaway-Stop (siehe Stop-Bedingungen), kein weiterer Zyklus. Offene Merges, Blocker, Review-Ergebnisse einarbeiten.
-2. **CEO-Tick** (inline nach `role-ceo`): nächste WORK-Items bis WIP-Limit aktivieren, Gates bewerten. Kein neuer Grund → keine Umpriorisierung.
-3. **PO-Schritt** (nach `role-po`): aktivierte Items zu Karten schneiden — mit Akzeptanzkriterien, Claim-Grenzen und **disjunkten Claim-Zonen**. Ideen-Triage über `project/IDEAS.md`.
-4. **DEV-Fan-out (parallel):** je Karte ein DEV-Subagent, alle in **einem** Aufruf-Block. Kontext **einbetten statt lesen lassen**: WORK-Karte und Profil-Auszug (Kommandos, Qualitätsregeln) stehen wörtlich im Prompt — der Subagent liest nur noch seinen Rollen-Skill. **Modellwahl nach Karten-Komplexität:** S/M → ein Modell unterhalb des Orchestrators (z. B. Sonnet); L oder „heikel" → Orchestrator-Modell. Der Orchestrator prüft die Einstufung vor dem Spawn: Risiko-Regex-Treffer in der Claim-Zone, Gate-Relevanz oder Security-/Nebenläufigkeits-Bezug überstimmen eine niedrigere PO-Einstufung nach oben — nie nach unten. Zonen nicht sicher disjunkt oder > 2 parallele DEVs → Worktree-Isolation pro Agent. Parallele DEVs fahren nur gezielte Tests ihrer Zone plus Regressionscheck der Fundament-Module — der volle Suite-Lauf gehört dem Orchestrator nach dem Merge (sonst testet jeder gegen halbfertige Nachbarzonen).
-5. **Review-Pipeline (risikobasiert):** sobald ein DEV fertig ist, Reviewer-Subagent nach `role-reviewer` starten — nicht auf die langsamste Karte warten. **Voll-Review** (Gate-relevant → Orchestrator-Modell, sonst eine Stufe darunter) bei: Produktionscode, Gate-Paketen, Risiko-Regex-Treffern im Diff oder enthaltenen Status-Claims. **Light-Review** (kleines Modell) bei Trivialpaketen (nur Tests/Doku, kleiner Diff): Zonen-Check, Akzeptanz-Abgleich, gezielte Tests, kompaktes Claim-Audit — ohne Muster-Stichprobe.
-6. **Fix-Schleife:** Findings/`BLOCKED` → gezielter Fix-Lauf (gleiche Karte, gleiche Zone). **Max. 2 Anläufe pro Blocker**, dann greift der Autonomievertrag (Eskalation oder DEFER mit ADR). Findings in Dateien **außerhalb aller Zonen** (Niemandsland, z. B. Bestands- oder Skeleton-Tests): nie vom DEV mitfixen lassen — PO schneidet sofort eine eigene Fix-Karte mit eigener Zone, die vor dem Merge der blockierten Pakete läuft.
-7. **Merge sequenziell:** ein Paket nach dem anderen mergen — davor pro Paket der mechanische Check,
-   ausgeführt auf dem Paket-Branch mit sauberem Orchestrator-Tree (eigene `project/`-Änderungen wie
-   `STATE.md`/`IDEAS.md` vorher committen, damit nur Paket-Änderungen im Check landen):
-   `<skills-dir>/_shared/scripts/merge-check.sh <base> --zone <karten-zone>… --allow project/backlog/<WORK-NNN>.md --allow project/PROFILE.md --test-cmd "<voll-Test aus PROFILE>"`
-   — `<skills-dir>` ist der Installationsort dieser Skills (projektlokal `.claude/skills/`, global `~/.claude/skills/`).
-   **Kein breites `--allow project/`:** das würde DEV-Änderungen an `STATE.md`, `BRIEF.md` oder `IDEAS.md`
-   durchwinken. Erlaubt sind nur die eigene Karte (Evidenz) und `PROFILE.md` (Kommando-Pflege);
-   für Sonderfälle kennt der Check `--deny` (überstimmt Zone und Allow).
-   `FAIL` blockiert den Merge hart (Zonen-Verletzung → Finding + Fix-Karte; rote Suite → Fix-Schleife) — kein Ermessen.
-   Die **volle Suite läuft genau einmal pro Paket: hier, über den Check** — DEV und Reviewer testen nur gezielt, Doppelläufe sind gestrichen. Karte auf FERTIG inkl. Evidenz, `STATE.md` aktualisieren.
-8. **Ideen einsammeln:** `IDEEN`/`FOLLOW-UP` aus allen DEV-Outputs nach `project/IDEAS.md` übertragen — nur eintragen, Bewertung erst im PO-Schritt des **nächsten** Zyklus (Cooling-off).
-9. **Stop-Check** (siehe unten), sonst nächster Zyklus.
+1. **Sync:** read `STATE.md`; increment the cycle counter (basis for cooling-off) and check it against the cycle cap — cap reached → runaway stop (see stop conditions), no further cycle. Incorporate open merges, blockers, review results.
+2. **CEO tick** (inline per `role-ceo`): activate next WORK items up to the WIP limit, evaluate gates. No new reason → no reprioritization.
+3. **PO step** (per `role-po`): cut activated items into cards — with acceptance criteria, claim limits, and **disjoint claim zones**. Idea triage via `project/IDEAS.md`.
+4. **DEV fan-out (parallel):** one DEV subagent per card, all in **one** invocation block. **Embed context instead of having it read**: the WORK card and profile extract (commands, quality rules) are verbatim in the prompt — the subagent only reads its role skill. **Model choice by card complexity:** S/M → one model below the orchestrator (e.g. Sonnet); L or "sensitive" → orchestrator model. The orchestrator verifies the rating before spawning: risk-regex hits in the claim zone, gate relevance, or security/concurrency aspects override a lower PO rating upward — never downward. Zones not safely disjoint or > 2 parallel DEVs → worktree isolation per agent. Parallel DEVs run only targeted tests of their zone plus a regression check of the foundation modules — the full suite run belongs to the orchestrator after the merge (otherwise everyone tests against half-finished neighbor zones).
+5. **Review pipeline (risk-based):** as soon as a DEV finishes, start a reviewer subagent per `role-reviewer` — don't wait for the slowest card. **Full review** (gate-relevant → orchestrator model, otherwise one tier below) for: production code, gate packages, risk-regex hits in the diff, or included status claims. **Light review** (small model) for trivial packages (tests/docs only, small diff): zone check, acceptance check, targeted tests, compact claim audit — without pattern spot-check.
+6. **Fix loop:** findings/`BLOCKED` → targeted fix run (same card, same zone). **Max. 2 attempts per blocker**, then the autonomy contract applies (escalation or DEFER with ADR). Findings in files **outside all zones** (no-man's-land, e.g. legacy or skeleton tests): never have the DEV fix them along the way — the PO immediately cuts a dedicated fix card with its own zone, which runs before the blocked packages merge.
+7. **Merge sequentially:** merge one package after another — before each, the mechanical check per package,
+   executed on the package branch with a clean orchestrator tree (commit your own `project/` changes such as
+   `STATE.md`/`IDEAS.md` first, so only package changes land in the check):
+   `<skills-dir>/_shared/scripts/merge-check.sh <base> --zone <card-zone>… --allow project/backlog/<WORK-NNN>.md --allow project/PROFILE.md --test-cmd "<full test from PROFILE>"`
+   — `<skills-dir>` is the installation location of these skills (project-local `.claude/skills/`, global `~/.claude/skills/`).
+   **No broad `--allow project/`:** that would wave through DEV changes to `STATE.md`, `BRIEF.md`, or `IDEAS.md`.
+   Allowed are only the package's own card (evidence) and `PROFILE.md` (command maintenance);
+   for special cases the check knows `--deny` (overrides zone and allow).
+   `FAIL` blocks the merge hard (zone violation → finding + fix card; red suite → fix loop) — no discretion.
+   The **full suite runs exactly once per package: here, via the check** — DEV and reviewer only test targeted, duplicate runs are cut. Card to DONE incl. evidence, update `STATE.md`.
+8. **Collect ideas:** transfer `IDEAS`/`FOLLOW-UP` from all DEV outputs to `project/IDEAS.md` — record only; evaluation happens in the PO step of the **next** cycle (cooling-off).
+9. **Stop check** (see below), otherwise next cycle.
 
-## Fokus-Regeln (hart)
-- **Wertfilter:** Nichts wird gebaut, was nicht ein Muss-Ergebnis stärkt oder als Erweiterung durch die PO-Triage ging.
-- **Cooling-off:** Keine Idee wird im selben Zyklus geboren und gebaut.
-- **Ideen-Ketten-Regel:** Ideen, die bei der Umsetzung einer Erweiterung entstehen (2. Ordnung), werden in diesem Projektlauf nie aktiviert — nur notiert.
-- **Erweiterungsbudget** aus dem Brief ist ein Hard Cap pro Milestone.
-- Muss-Ergebnisse schlagen Erweiterungen: solange ein P0 offen ist, wird keine Erweiterung aktiviert.
+## Focus rules (hard)
+- **Value filter:** nothing is built that doesn't strengthen a must-have outcome or passed PO triage as an extension.
+- **Cooling-off:** no idea is born and built in the same cycle.
+- **Idea-chain rule:** ideas that arise while implementing an extension (second order) are never activated in this project run — only recorded.
+- **Extension budget** from the brief is a hard cap per milestone.
+- Must-have outcomes beat extensions: as long as a P0 is open, no extension gets activated.
 
-| Rationalisierung | Realität |
+| Rationalization | Reality |
 |---|---|
-| „Der DEV-Agent ist eh gerade in der Datei" | Gelegenheit ist kein Wert. Zone gilt; Idee in den Trichter. |
-| „Nur diese eine Erweiterung noch, dann MVP" | So entsteht Idee-auf-Idee. Budget und P0-Regel gelten. |
-| „Das Review dauert zu lange, ich merge direkt" | Ungeprüfte Claims sind die teuerste Abkürzung. Pipeline einhalten. |
-| „Ich frage den User kurz, ist ja nur eine Kleinigkeit" | Autonomievertrag gilt: entscheiden, loggen, weiter. |
+| "The DEV agent is already in that file anyway" | Opportunity is not value. The zone applies; the idea goes into the funnel. |
+| "Just this one extension, then MVP" | That's how idea-upon-idea starts. Budget and P0 rule apply. |
+| "The review takes too long, I'll merge directly" | Unverified claims are the most expensive shortcut. Keep the pipeline. |
+| "I'll quickly ask the user, it's just a small thing" | The autonomy contract applies: decide, log, continue. |
 
-## Eskalation an den User (einzige Unterbrechungsgründe)
-Genau die Kriterien aus dem Autonomievertrag in `project/BRIEF.md`:
-Kernvertrags-Änderung nötig · Geld/Accounts/Deployment/Veröffentlichung · Rechts-/Sicherheits-Grauzone ·
-Blocker nach 2 Anläufen. Eskalation = kompakte Entscheidungsvorlage (Lage, Optionen, Empfehlung), kein Log-Dump.
+## Escalation to the user (only reasons to interrupt)
+Exactly the criteria from the autonomy contract in `project/BRIEF.md`:
+core-contract change needed · money/accounts/deployment/publishing · legal/security gray area ·
+blocker after 2 attempts. Escalation = compact decision memo (situation, options, recommendation), not a log dump.
 
-## Retro am Milestone-/MVP-Gate (Pflicht vor dem Report)
-Max. **3–5 Learnings destillieren** — je: Regel in einem Satz, Warum (Beleg), Anwendung. Quellen:
-Review-Findings, Blocker, revidierte ADRs. Projektspezifisches nach `project/LEARNINGS.md`;
-Generalisierbares zusätzlich als eigene Datei in die globale Wissensbasis
-(`$SKILLS_KNOWLEDGE_DIR`, sonst Default `~/Projekte/Skills/_shared/knowledge/`;
-existiert keins von beiden → nur projektlokal; Format siehe deren README).
-Kein Verlaufsprotokoll, keine Duplikate von Regeln, die bereits in Skills stehen — nur Destillat.
+## Retro at the milestone/MVP gate (mandatory before the report)
+Distill max. **3–5 learnings** — each: rule in one sentence, why (evidence), application. Sources:
+review findings, blockers, revised ADRs. Project-specific ones go to `project/LEARNINGS.md`;
+generalizable ones additionally as their own file into the global knowledge base
+(`$SKILLS_KNOWLEDGE_DIR`, otherwise default `~/Projekte/Skills/_shared/knowledge/`;
+if neither exists → project-local only; format see its README).
+No running log, no duplicates of rules already codified in skills — distillate only.
 
-## Stop-Bedingungen
-- **MVP-Gate:** alle Muss-Ergebnisse durch Review-Verdicts belegt → Retro, dann Abschlussreport (siehe unten), dann stoppen. Kein Weiterbauen an Erweiterungen ohne neuen Auftrag.
-- **Eskalationskriterium erfüllt** → Entscheidungsvorlage an den User.
-- **Runaway-Guard:** Zyklus-Cap aus `STATE.md` erreicht (Default 15 pro Milestone) → Stop mit Entscheidungsvorlage: was fertig ist, was hängt, warum es nicht konvergiert; Optionen: Cap erhöhen, Scope schneiden, DEFER. Das Cap wird nie stillschweigend erhöht — auch nicht um „nur einen" Zyklus. Bewusst kein Token-Budget: nicht messbar, wäre Pseudo-Mechanik.
-- **Kontextdruck:** Handoff nach `_shared/templates/HANDOFF.template.md` schreiben (inkl. offener Worktrees/Branches), sauber beenden. Fortsetzung: dieser Skill, Schritt 1.
+## Stop conditions
+- **MVP gate:** all must-have outcomes proven by review verdicts → retro, then final report (see below), then stop. No further work on extensions without a new assignment.
+- **Escalation criterion met** → decision memo to the user.
+- **Runaway guard:** cycle cap from `STATE.md` reached (default 15 per milestone) → stop with a decision memo: what is done, what is stuck, why it doesn't converge; options: raise the cap, cut scope, DEFER. The cap is never raised silently — not even by "just one" cycle. Deliberately no token budget: not measurable, would be pseudo-mechanics.
+- **Context pressure:** write a handoff per `_shared/templates/HANDOFF.template.md` (incl. open worktrees/branches), finish cleanly. Resume: this skill, step 1.
 
-## Output-Disziplin
-Während der Zyklen keine Chat-Narration; Verlauf steht in `project/log/` und `STATE.md`.
-An den User gehen nur: Milestone-/MVP-Report, Eskalations-Vorlagen und der Abschlussreport
-(erreichte Muss-Ergebnisse mit Evidenz, getroffene ADRs, offene NACH-MVP-Ideen, bekannte Grenzen).
+## Output discipline
+No chat narration during cycles; the history lives in `project/log/` and `STATE.md`.
+The user receives only: milestone/MVP report, escalation memos, and the final report
+(achieved must-have outcomes with evidence, ADRs taken, open POST-MVP ideas, known limits).
 
-## Rote Flaggen
-- Zwei DEV-Agenten mit überlappenden Zonen ohne Worktree → Merge-Chaos vorprogrammiert
-- `STATE.md` und Realität widersprechen sich → erst Sync reparieren, dann weiterarbeiten
-- Ein Zyklus ohne einen einzigen Review → Claims ungeprüft, Stop
-- Erweiterung aktiv, während ein P0 offen ist → Verstoß gegen Fokus-Regeln
+## Red flags
+- Two DEV agents with overlapping zones and no worktree → merge chaos guaranteed
+- `STATE.md` and reality contradict each other → repair the sync first, then continue
+- A cycle without a single review → unverified claims, stop
+- Extension active while a P0 is open → violation of the focus rules

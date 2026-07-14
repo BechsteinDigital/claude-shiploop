@@ -1,27 +1,27 @@
-# Globale Wissensbasis (Erfahrungswissen)
+# Global Knowledge Base (experience)
 
-Projektübergreifendes, destilliertes Lernen der Skill-Suite. **Kanonischer Ort ist genau dieses
-Verzeichnis.** Skills finden es über die Env-Variable `SKILLS_KNOWLEDGE_DIR`, Default
-`~/Projekte/Skills/_shared/knowledge/` (liegt das Master-Repo woanders: Variable setzen, z. B. in
-`~/.bashrc`). `install.sh` kopiert es bewusst NICHT in Projekte, damit es nur eine Wahrheit gibt.
-Skills lesen/schreiben direkt hier; ist der Pfad auf einer Maschine nicht auflösbar, degradieren
-sie auf projektlokales `project/LEARNINGS.md`.
+Cross-project, distilled learning of the skill suite. **The canonical location is exactly this
+directory.** Skills find it via the env variable `SKILLS_KNOWLEDGE_DIR`, default
+`~/Projekte/Skills/_shared/knowledge/` (if the master repo lives elsewhere: set the variable, e.g. in
+`~/.bashrc`). `install.sh` deliberately does NOT copy it into projects, so there is only one truth.
+Skills read/write directly here; if the path can't be resolved on a machine, they degrade
+to project-local `project/LEARNINGS.md`.
 
-## Was hierher gehört
-- Generalisierbare Regeln aus Retros (Milestone-/MVP-Gate des `autonomous-loop`)
-- Wiederkehrende Review-Finding-Muster, Blocker-Ursachen, revidierte Entscheidungen
-- Bewährte Setup-/Stack-Muster mit Beleg
+## What belongs here
+- Generalizable rules from retros (milestone/MVP gate of `autonomous-loop`)
+- Recurring review-finding patterns, blocker causes, revised decisions
+- Proven setup/stack patterns with evidence
 
-## Was NICHT hierher gehört
-- Projektzustand (lebt in `project/STATE.md` — nie spiegeln)
-- Regeln, die bereits in einem Skill kodifiziert sind (dann gehören sie in den Skill)
-- Verlaufsprotokolle, Session-Transkripte, Rohdaten — Wissensbasen verrotten durch Rauschen
+## What does NOT belong here
+- Project state (lives in `project/STATE.md` — never mirror it)
+- Rules already codified in a skill (then they belong in the skill)
+- Running logs, session transcripts, raw data — knowledge bases rot through noise
 
 ## Format
-Eine Datei pro Learning, kebab-case, nach `LEARNING.template.md`. Max. 3–5 neue Einträge pro Retro.
-Widerlegte Einträge nicht löschen, sondern oben mit `Status: widerlegt durch <datei/beleg>` markieren.
+One file per learning, kebab-case, per `LEARNING.template.md`. Max. 3–5 new entries per retro.
+Don't delete refuted entries; mark them at the top with `Status: refuted by <file/evidence>`.
 
-## Skalierungspfad
-Wächst die Basis über einige hundert Einträge, kommt ein semantischer Index davor (Empfehlung:
-Graphiti/Zep als MCP — temporaler Knowledge Graph). Die Markdown-Dateien bleiben dann die Quelle,
-der Graph ist nur Index — analog graphify über Code.
+## Scaling path
+If the base grows beyond a few hundred entries, put a semantic index in front (recommendation:
+Graphiti/Zep as MCP — temporal knowledge graph). The markdown files remain the source;
+the graph is only an index — analogous to graphify over code.

@@ -1,23 +1,23 @@
 # STATE
 
-Stand: <Datum/Uhrzeit> · Milestone: <M1: …> · WIP-Limit: <Default 3> · Zyklus: <n> / Cap: <Default 15 pro Milestone>
+As of: <date/time> · Milestone: <M1: …> · WIP limit: <default 3> · Cycle: <n> / cap: <default 15 per milestone>
 
-Einzige Quelle für den Projektzustand. Keine Kopien dieser Daten in anderen Dateien.
+Single source for project state. No copies of this data in other files.
 
-## Aktiv
-- WORK-001 — <Titel> — <Rolle läuft> — Zone: `src/…`
+## Active
+- WORK-001 — <title> — <role running> — zone: `src/…`
 
-## Wartend
+## Waiting
 - …
 
-## Blockiert
-- WORK-00X — <Grund, Anläufe: n/2>
+## Blocked
+- WORK-00X — <reason, attempts: n/2>
 
-## Erledigt (dieser Milestone)
+## Done (this milestone)
 - …
 
-## Erweiterungsbudget
-- verbraucht: 0 / <N> in diesem Milestone
+## Extension budget
+- consumed: 0 / <N> this milestone
 
-## Nächster Schritt
+## Next step
 - …
