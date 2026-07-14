@@ -11,8 +11,14 @@ A project- and language-agnostic skill suite: from an idea pitch through
 autonomous setup to a parallel, self-controlled delivery loop — with contracts, gates, and
 evidence rules instead of hope.
 
-**Proven end-to-end:** full run from pitch → interview → setup → 3 loop cycles
-(2 DEV agents in parallel) → MVP gate on a real project (`standup` CLI, 36/36 tests passing).
+<p align="center">
+  <img src="docs/demo.svg" alt="Replay of a real shiploop run: pitch → onboarding → setup → 3 loop cycles with parallel DEV agents → MVP gate, 36/36 tests" width="800">
+</p>
+
+**Proven end-to-end, artifacts included:** the demo above replays a real run — pitch →
+interview → setup → 3 loop cycles (2 DEV agents in parallel) → MVP gate (`standup` CLI,
+36/36 tests). The unedited project artifacts live in [`examples/standup`](examples/README.md),
+and CI re-runs its full test suite on every push.
 
 ## How it works
 

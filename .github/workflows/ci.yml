@@ -23,6 +23,14 @@ jobs:
               open(p + '/SKILL.md')
           "
 
+  example-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the standup example's full suite (the README's 36/36 claim)
+        working-directory: examples/standup
+        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+
   install-smoke:
     runs-on: ubuntu-latest
     steps:

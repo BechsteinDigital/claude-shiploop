@@ -11,8 +11,14 @@ Projekt- und sprachunabhängige Skill-Suite: vom Idee-Pitch über autonomes Setu
 bis zum parallelen, selbstkontrollierten Delivery-Loop — mit Verträgen, Gates und Evidenzregeln
 statt Hoffnung.
 
-**End-to-End validiert:** kompletter Durchlauf Pitch → Interview → Setup → 3 Loop-Zyklen
-(2 DEVs parallel) → MVP-Gate mit einem realen Projekt (`standup`-CLI, 36/36 Tests grün).
+<p align="center">
+  <img src="docs/demo.svg" alt="Replay eines echten shiploop-Laufs: Pitch → Onboarding → Setup → 3 Loop-Zyklen mit parallelen DEV-Agenten → MVP-Gate, 36/36 Tests" width="800">
+</p>
+
+**End-to-End validiert, Artefakte inklusive:** Die Demo oben ist das Replay eines echten
+Durchlaufs — Pitch → Interview → Setup → 3 Loop-Zyklen (2 DEVs parallel) → MVP-Gate
+(`standup`-CLI, 36/36 Tests). Die unbearbeiteten Projekt-Artefakte liegen in
+[`examples/standup`](examples/README.md), und die CI führt dessen Testsuite bei jedem Push aus.
 
 ## Ablauf
 
