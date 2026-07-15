@@ -1,6 +1,6 @@
 {
   "name": "claude-shiploop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Autonomous delivery skills for Claude Code — pitch an idea, get an MVP. CEO/PO/DEV/Reviewer agent team with contracts, gates, and evidence rules.",
   "author": {
     "name": "Bechstein.Digital Ecommerce UG",
