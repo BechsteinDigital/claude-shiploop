@@ -53,6 +53,76 @@ cd claude-shiploop
 Then start a Claude Code session **inside the target project** and pitch your idea —
 `project-onboarding` picks it up from there.
 
+## Running it
+
+The whole chain is **hands-off after the pitch**: onboarding hands to setup, setup starts the
+loop — you never type the next step. Your only inputs are the pitch, the interview answers, and
+one brief approval.
+
+### 0 · Start the session (once, in the target project)
+
+```bash
+cd /path/to/your/project
+claude --permission-mode bypassPermissions   # or start normally and press Shift+Tab
+```
+
+The loop runs unattended: DEV agents write files **and** run tests/build with nobody at the
+keyboard. In `default` mode every write and every command blocks on a prompt — so give it a
+non-interactive mode (`bypassPermissions`, or a pre-approved allowlist in
+`.claude/settings.json`). Shift+Tab cycles the mode live.
+
+The model is wired into each skill (frontmatter) — you don't need to set one. For very long
+runs you may prefer a 1M-context session: `/model opus[1m]`.
+
+### 1 · Pitch (the only interactive step)
+
+Just describe the idea — `project-onboarding` loads on its own — or invoke it explicitly:
+
+```
+/project-onboarding
+```
+
+It mirrors the idea back, runs the interview (≤ 4 questions per round: Core → Scope → Frame →
+Autonomy), checks the Definition of Ready, and writes `project/BRIEF.md`. **You approve the
+brief explicitly** — that approval is the gate to autonomy.
+
+### 2 · Setup + loop (automatic)
+
+On approval, `autonomous-setup` starts immediately (research → ADRs → scaffold → backlog), then
+launches `autonomous-loop` directly. From here the roles run as (parallel) subagents:
+CEO → PO → DEV ∥ DEV → REVIEWER, idea funnel, gates. No questions — decisions are logged as ADRs.
+You see only: milestone/gate reports, escalation memos, and the final MVP report.
+
+### 3 · When it comes back to you
+
+- **Escalation** — only on the criteria you agreed to in the autonomy contract (core-contract
+  change, money/accounts/deployment, legal/security gray area, a blocker after 2 attempts). You
+  get a compact decision memo; answer in your next message and it continues.
+- **MVP gate reached** — retro + final report, then it stops (no gold-plating).
+- **Context pressure / runaway cap** — it writes a handoff and stops cleanly.
+
+### 4 · Resume a run
+
+After a handoff, an interruption, or a new session on an already-set-up project:
+
+```
+/autonomous-loop
+```
+
+It reads `project/STATE.md` and picks up where it left off.
+
+### Running a single role (optional)
+
+The roles also work standalone — handy for a one-off audit or re-running one card:
+
+```
+/role-auditor payments               # state audit (optional: scope to one subsystem)
+/role-dev WORK-042                    # implement exactly one approved card
+/role-reviewer WORK-042 main HEAD     # delta review of one package
+```
+
+In the loop these are orchestrated for you; the arguments above are only for direct use.
+
 ## The skills
 
 | Skill | Purpose |
@@ -102,10 +172,11 @@ project/
 4. **Parallelism via claim zones:** disjoint file zones per package; worktree isolation when
    uncertain.
 5. **Claims need evidence:** documentation may never claim more than code + tests prove.
-6. **Model hierarchy:** expensive tokens where judgment happens (orchestrator, PO cutting, gate
-   reviews); cheap tokens where execution happens (DEV/review by card complexity, auditor
-   fan-out). Card quality is what makes small models safe — which is why the PO is never
-   downgraded.
+6. **Model hierarchy:** expensive tokens where judgment happens, cheap where execution happens —
+   wired into each skill's frontmatter. Opus for onboarding, setup, loop, CEO, PO, and auditor;
+   DEV and reviewer carry `inherit` so the loop picks per card: Sonnet for S/M work, Opus for
+   large/sensitive cards and gate reviews, Haiku for light reviews. Card quality is what makes
+   small models safe — which is why the PO is never downgraded.
 7. **Experience as distillate:** retro at the milestone gate → max. 3–5 learnings into
    `project/LEARNINGS.md`, generalizable ones into the global KB `_shared/knowledge/` (master
    location only, not installed into projects). Setup and reviews read them — every project

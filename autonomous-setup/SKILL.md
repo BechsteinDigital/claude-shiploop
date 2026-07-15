@@ -1,6 +1,8 @@
 ---
 name: autonomous-setup
 description: Use when an approved product brief (project/BRIEF.md, status APPROVED) exists and the project should be set up without further user input — research, tech decisions, scaffold, backlog. Do not use while the brief is missing or DRAFT (→ project-onboarding).
+model: opus
+disallowed-tools: AskUserQuestion
 ---
 
 # Autonomous Setup
@@ -9,6 +11,8 @@ description: Use when an approved product brief (project/BRIEF.md, status APPROV
 From here on, **no questions to the user**. Every open decision is made autonomously and logged in
 `project/DECISIONS.md` as an ADR. Only exceptions: the escalation criteria from the
 autonomy contract in `project/BRIEF.md`.
+
+**No `AskUserQuestion` tool** (enforced): a reversible open decision → decide and log an ADR; an escalation criterion hit → stop with a decision memo. Never an interactive prompt.
 
 ## Precondition
 `project/BRIEF.md` exists with status APPROVED. Otherwise abort and request `project-onboarding`.

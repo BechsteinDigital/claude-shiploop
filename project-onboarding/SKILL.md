@@ -1,6 +1,8 @@
 ---
 name: project-onboarding
 description: Use when the user pitches a new project or product idea, wants to start a new project, or asks for an onboarding interview — including vague ideas ("I have an idea for an app"). The only interactive skill of the suite; everything after it runs autonomously.
+model: opus
+effort: high
 ---
 
 # Project Onboarding (Pitch Interview)

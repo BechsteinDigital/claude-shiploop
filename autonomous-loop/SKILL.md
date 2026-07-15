@@ -1,6 +1,8 @@
 ---
 name: autonomous-loop
 description: Use when a set-up project (project/BRIEF.md approved, PROFILE/STATE/backlog present) should continue building autonomously — orchestration of CEO/PO/DEV/REVIEWER cycles with parallel agents, without user input. Also for resuming after an interruption or handoff.
+model: opus
+disallowed-tools: AskUserQuestion
 ---
 
 # Autonomous Delivery Loop
@@ -15,8 +17,8 @@ constitution; `project/STATE.md` the single state store.
 1. **Sync:** read `STATE.md`; increment the cycle counter (basis for cooling-off) and check it against the cycle cap — cap reached → runaway stop (see stop conditions), no further cycle. Incorporate open merges, blockers, review results.
 2. **CEO tick** (inline per `role-ceo`): activate next WORK items up to the WIP limit, evaluate gates. No new reason → no reprioritization.
 3. **PO step** (per `role-po`): cut activated items into cards — with acceptance criteria, claim limits, and **disjoint claim zones**. Idea triage via `project/IDEAS.md`.
-4. **DEV fan-out (parallel):** one DEV subagent per card, all in **one** invocation block. **Embed context instead of having it read**: the WORK card and profile extract (commands, quality rules) are verbatim in the prompt — the subagent only reads its role skill. **Model choice by card complexity:** S/M → one model below the orchestrator (e.g. Sonnet); L or "sensitive" → orchestrator model. The orchestrator verifies the rating before spawning: risk-regex hits in the claim zone, gate relevance, or security/concurrency aspects override a lower PO rating upward — never downward. Zones not safely disjoint or > 2 parallel DEVs → worktree isolation per agent. Parallel DEVs run only targeted tests of their zone plus a regression check of the foundation modules — the full suite run belongs to the orchestrator after the merge (otherwise everyone tests against half-finished neighbor zones).
-5. **Review pipeline (risk-based):** as soon as a DEV finishes, start a reviewer subagent per `role-reviewer` — don't wait for the slowest card. **Full review** (gate-relevant → orchestrator model, otherwise one tier below) for: production code, gate packages, risk-regex hits in the diff, or included status claims. **Light review** (small model) for trivial packages (tests/docs only, small diff): zone check, acceptance check, targeted tests, compact claim audit — without pattern spot-check.
+4. **DEV fan-out (parallel):** one DEV subagent per card, all in **one** invocation block. **Embed context instead of having it read**: the WORK card and profile extract (commands, quality rules) are verbatim in the prompt — the subagent only reads its role skill. **Model choice by card complexity:** S/M → `sonnet` (very large diff or wide context → `sonnet[1m]`); L or "sensitive" → `opus`. These override the subagent's own `model` field (the role skills carry `inherit` precisely so the spawn decides). The orchestrator verifies the rating before spawning: risk-regex hits in the claim zone, gate relevance, or security/concurrency aspects override a lower PO rating upward — never downward. Zones not safely disjoint or > 2 parallel DEVs → worktree isolation per agent. Parallel DEVs run only targeted tests of their zone plus a regression check of the foundation modules — the full suite run belongs to the orchestrator after the merge (otherwise everyone tests against half-finished neighbor zones).
+5. **Review pipeline (risk-based):** as soon as a DEV finishes, start a reviewer subagent per `role-reviewer` — don't wait for the slowest card. **Full review** (gate-relevant → `opus`, otherwise `sonnet`) for: production code, gate packages, risk-regex hits in the diff, or included status claims. **Light review** (`haiku`) for trivial packages (tests/docs only, small diff): zone check, acceptance check, targeted tests, compact claim audit — without pattern spot-check.
 6. **Fix loop:** findings/`BLOCKED` → targeted fix run (same card, same zone). **Max. 2 attempts per blocker**, then the autonomy contract applies (escalation or DEFER with ADR). Findings in files **outside all zones** (no-man's-land, e.g. legacy or skeleton tests): never have the DEV fix them along the way — the PO immediately cuts a dedicated fix card with its own zone, which runs before the blocked packages merge.
 7. **Merge sequentially:** merge one package after another — before each, the mechanical check per package,
    executed on the package branch with a clean orchestrator tree (commit your own `project/` changes such as
@@ -48,7 +50,7 @@ constitution; `project/STATE.md` the single state store.
 ## Escalation to the user (only reasons to interrupt)
 Exactly the criteria from the autonomy contract in `project/BRIEF.md`:
 core-contract change needed · money/accounts/deployment/publishing · legal/security gray area ·
-blocker after 2 attempts. Escalation = compact decision memo (situation, options, recommendation), not a log dump.
+blocker after 2 attempts. Escalation = compact decision memo (situation, options, recommendation), not a log dump. **You have no `AskUserQuestion` tool**: emit the memo and end the turn — a background or scheduled run has no one to answer a prompt; the user replies next turn, when the restriction lifts.
 
 ## Retro at the milestone/MVP gate (mandatory before the report)
 Distill max. **3–5 learnings** — each: rule in one sentence, why (evidence), application. Sources:

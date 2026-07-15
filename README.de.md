@@ -53,6 +53,79 @@ cd claude-shiploop
 Danach die Claude-Code-Session **im Zielprojekt** starten und die Idee pitchen —
 `project-onboarding` übernimmt ab dort.
 
+## Bedienung
+
+Die ganze Kette läuft **nach dem Pitch von selbst**: Onboarding übergibt an Setup, Setup startet
+den Loop — den nächsten Schritt tippst du nie. Deine einzigen Eingaben: der Pitch, die
+Interview-Antworten und eine kurze Freigabe.
+
+### 0 · Session starten (einmalig, im Zielprojekt)
+
+```bash
+cd /pfad/zum/projekt
+claude --permission-mode bypassPermissions   # oder normal starten und Shift+Tab drücken
+```
+
+Der Loop läuft unbeaufsichtigt: DEV-Agenten schreiben Dateien **und** führen Tests/Build aus,
+ohne dass jemand an der Tastatur sitzt. Im `default`-Modus blockiert jeder Write und jedes
+Kommando an einem Prompt — gib ihm also einen nicht-interaktiven Modus (`bypassPermissions` oder
+eine vorab freigegebene Allowlist in `.claude/settings.json`). Shift+Tab wechselt den Modus live.
+
+Das Modell steckt in jedem Skill (Frontmatter) — du musst keins setzen. Für sehr lange Läufe ggf.
+eine 1M-Kontext-Session: `/model opus[1m]`.
+
+### 1 · Pitch (der einzige interaktive Schritt)
+
+Beschreib einfach die Idee — `project-onboarding` lädt von selbst — oder ruf es explizit auf:
+
+```
+/project-onboarding
+```
+
+Es spiegelt die Idee zurück, führt das Interview (≤ 4 Fragen pro Runde: Kern → Scope → Rahmen →
+Autonomie), prüft die Definition of Ready und schreibt `project/BRIEF.md`. **Du gibst den Brief
+explizit frei** — diese Freigabe ist das Tor zur Autonomie.
+
+### 2 · Setup + Loop (automatisch)
+
+Mit der Freigabe startet `autonomous-setup` sofort (Research → ADRs → Scaffold → Backlog) und
+ruft dann direkt `autonomous-loop` auf. Ab hier laufen die Rollen als (parallele) Subagenten:
+CEO → PO → DEV ∥ DEV → REVIEWER, Ideen-Trichter, Gates. Keine Rückfragen — Entscheidungen werden
+als ADRs geloggt. Du siehst nur: Milestone-/Gate-Reports, Eskalations-Memos und den finalen
+MVP-Report.
+
+### 3 · Wenn es zu dir zurückkommt
+
+- **Eskalation** — nur bei den Kriterien aus dem Autonomievertrag (Kernvertrags-Änderung,
+  Geld/Accounts/Deployment, rechtliche/Sicherheits-Grauzone, Blocker nach 2 Versuchen). Du
+  bekommst ein kompaktes Entscheidungs-Memo; antworte in der nächsten Nachricht, dann läuft es
+  weiter.
+- **MVP-Gate erreicht** — Retro + Final-Report, dann Stopp (kein Gold-Plating).
+- **Kontextdruck / Runaway-Cap** — es schreibt einen Handoff und stoppt sauber.
+
+### 4 · Einen Lauf fortsetzen
+
+Nach Handoff, Unterbrechung oder in einer neuen Session auf einem bereits aufgesetzten Projekt:
+
+```
+/autonomous-loop
+```
+
+Es liest `project/STATE.md` und macht dort weiter, wo es aufgehört hat.
+
+### Eine einzelne Rolle starten (optional)
+
+Die Rollen funktionieren auch standalone — praktisch für ein einmaliges Audit oder das erneute
+Ausführen einer Karte:
+
+```
+/role-auditor payments               # Zustands-Audit (optional: auf ein Subsystem beschränken)
+/role-dev WORK-042                    # genau eine freigegebene Karte umsetzen
+/role-reviewer WORK-042 main HEAD     # Delta-Review eines Pakets
+```
+
+Im Loop werden sie für dich orchestriert; die Argumente oben sind nur für die direkte Nutzung.
+
 ## Skills
 
 | Skill | Zweck |
@@ -104,10 +177,11 @@ project/
 4. **Parallelität über Claim-Zonen:** disjunkte Dateizonen je Paket; bei Unsicherheit
    Worktree-Isolation.
 5. **Claims brauchen Evidenz:** Doku darf nie mehr behaupten als Code + Tests belegen.
-6. **Modell-Hierarchie:** Teure Tokens dorthin, wo geurteilt wird (Orchestrator, PO-Schnitt,
-   Gate-Reviews); günstige dorthin, wo ausgeführt wird (DEV/Review nach Karten-Komplexität,
-   Auditor-Fan-out). Die Kartenqualität macht kleine Modelle sicher — deshalb wird am PO nie
-   gespart.
+6. **Modell-Hierarchie:** Teure Tokens dorthin, wo geurteilt wird, günstige, wo ausgeführt wird —
+   in jedem Skill-Frontmatter verdrahtet. Opus für Onboarding, Setup, Loop, CEO, PO und Auditor;
+   DEV und Reviewer tragen `inherit`, damit der Loop je Karte wählt: Sonnet für S/M-Arbeit, Opus
+   für große/sensible Karten und Gate-Reviews, Haiku für Light-Reviews. Die Kartenqualität macht
+   kleine Modelle sicher — deshalb wird am PO nie gespart.
 7. **Erfahrungswissen als Destillat:** Retro am Milestone-Gate → max. 3–5 Learnings nach
    `project/LEARNINGS.md`, Generalisierbares in die globale KB `_shared/knowledge/` (nur am
    Master-Ort, wird nicht mitinstalliert). Setup und Reviews lesen sie — jedes Projekt startet

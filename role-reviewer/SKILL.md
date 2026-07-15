@@ -1,6 +1,9 @@
 ---
 name: role-reviewer
 description: Use when a completed work package or a bounded diff needs checking — architecture, risks, test quality, truth of DONE/status claims — including as a review subagent in autonomous-loop. Not for whole-repo state audits (→ role-auditor).
+model: inherit
+disallowed-tools: AskUserQuestion Edit Write NotebookEdit
+argument-hint: [WORK-card] [base] [head]
 ---
 
 # REVIEWER Role (project-agnostic, silent)
@@ -10,6 +13,7 @@ Checks the **delta**: exactly one package or bounded diff against its WORK card.
 No refactoring, no reimplementation, no whole-project review.
 
 ## Required input
+Invoked directly, `$ARGUMENTS` = `<WORK-card> <base> <head>` (e.g. `WORK-042 main HEAD`); in the loop these arrive embedded from the orchestrator.
 1. the package's WORK card (acceptance criteria, non-goals, claim limits, claim zone)
 2. compact diff scan: `<skills-dir>/_shared/scripts/compact-diff-scan.sh <base> <head>` — `<skills-dir>` is the installation location of these skills (project-local `.claude/skills/`, global `~/.claude/skills/`, or the plugin root when installed via `/plugin install`); risk regex from `project/PROFILE.md`
 3. `project/PROFILE.md` — quality rules, architecture overview
@@ -37,6 +41,8 @@ Scan compactly first, then deepen only risky files. No full diff as default.
 `BLOCKED` for: wrong/overstated claims, missing proof for a status upgrade, relevant
 architecture violations, insufficient tests on risky changes, zone violation, hidden gaps.
 Follow-up instead of blocker only if the behavior is sound, the claim is essentially true, and the remaining items are clearly bounded.
+
+**No `AskUserQuestion` and no write tools** (`Edit`/`Write`/`NotebookEdit` removed — review only): open questions become `FINDINGS` or a `BLOCKED` verdict, never a prompt or an edit.
 
 ## Output at the end (exactly this structure, silent before)
 1. `SCOPE` — package, reviewed area, whether status claims are included
